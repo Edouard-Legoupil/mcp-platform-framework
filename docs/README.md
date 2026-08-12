@@ -48,21 +48,21 @@ az functionapp deployment source config-zip \
 The MCP Platform Framework follows a **strict separation of concerns** principle:
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    MCP Platform Framework                      │
-├─────────────────────────────────────────────────────────────┤
+┌───────────────────────────────────────────────────────────────────────┐
+│                    MCP Platform Framework                             │
+├───────────────────────────────────────────────────────────────────────┤
 │  🔐 Authentication      │  🛡️ Authorization        │  📊 Telemetry    │
-│  📝 Audit Logging        │  ❌ Error Handling        │  ⚙️  Config      │
-│  🏷️ Classification       │  🔧 Registration          │  🔗 Connectivity │
-└─────────────────────────────────────────────────────────────┘
+│  📝 Audit Logging       │  ❌ Error Handling       │  ⚙️  Config      │
+│  🏷️ Classification      │  🔧 Registration         │  🔗 Connectivity │
+└───────────────────────────────────────────────────────────────────────┘
                               │
                               ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    Domain Repositories                       │
-├─────────────────────────────────────────────────────────────┤
-│  mcp-donor-management/  │  mcp-finance/           │  mcp-supply/    │
-│  mcp-campaign/          │  mcp-psp/               │  ...           │
-└─────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────┐
+│                    Domain Repositories                                │
+├───────────────────────────────────────────────────────────────────────┤
+│  mcp-donor-management/  │  mcp-finance/           │  mcp-supply/      │
+│  mcp-campaign/          │  mcp-psp/               │  ...              │
+└───────────────────────────────────────────────────────────────────────┘
 ```
 
 **Key Principles:**
