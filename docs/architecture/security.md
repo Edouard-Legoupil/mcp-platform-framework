@@ -6,13 +6,13 @@ The MCP Platform Framework implements a **defense-in-depth** security model with
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                    DEFENSE-IN-DEPTH SECURITY MODEL                     │
+│                    DEFENSE-IN-DEPTH SECURITY MODEL                  │
 ├─────────────────────────────────────────────────────────────────────┤
-│  LAYER 1: PERIMETER (Network Security, DDoS Protection, WAF)         │
-│  LAYER 2: TRANSPORT (TLS 1.2+, Certificate Validation)                 │
-│  LAYER 3: APPLICATION (AuthN, AuthZ, Input Validation)                │
-│  LAYER 4: DATA (Classification, Encryption, Masking)                  │
-│  LAYER 5: MONITORING (Audit Logging, Telemetry, Anomaly Detection)    │
+│  LAYER 1: PERIMETER (Network Security, DDoS Protection, WAF)        │
+│  LAYER 2: TRANSPORT (TLS 1.2+, Certificate Validation)              │
+│  LAYER 3: APPLICATION (AuthN, AuthZ, Input Validation)              │
+│  LAYER 4: DATA (Classification, Encryption, Masking)                │
+│  LAYER 5: MONITORING (Audit Logging, Telemetry, Anomaly Detection)  │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 

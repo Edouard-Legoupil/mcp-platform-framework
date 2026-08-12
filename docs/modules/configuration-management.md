@@ -14,16 +14,16 @@ The Configuration Management Module handles:
 
 ```
 ┌─────────────────────────────────────────┐
-│      Configuration Management Module      │
+│      Configuration Management Module    │
 ├─────────────────────────────────────────┤
-│  ┌─────────────────┐  ┌─────────────────┐ │
-│  │ Environment     │  │ Key Vault       │ │
-│  │ Configuration   │  │ Integration     │ │
-│  └─────────────────┘  └─────────────────┘ │
-│  ┌─────────────────┐  ┌─────────────────┐ │
-│  │ Validation      │  │ Secret          │ │
-│  │                 │  │ Management      │ │
-│  └─────────────────┘  └─────────────────┘ │
+│  ┌─────────────────┐  ┌───────────────┐ │
+│  │ Environment     │  │ Key Vault     │ │
+│  │ Configuration   │  │ Integration   │ │
+│  └─────────────────┘  └───────────────┘ │
+│  ┌─────────────────┐  ┌───────────────┐ │
+│  │ Validation      │  │ Secret        │ │
+│  │                 │  │ Management    │ │
+│  └─────────────────┘  └───────────────┘ │
 └─────────────────────────────────────────┘
 ```
 

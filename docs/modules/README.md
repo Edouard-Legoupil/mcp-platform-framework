@@ -22,25 +22,25 @@ The MCP Platform Framework consists of several specialized modules, each handlin
 Each module follows a consistent architecture:
 
 ```
-┌─────────────────────────────────────────────────────────────┐
+┌────────────────────────────────────────────────────────────────┐
 │                      MODULE STRUCTURE                          │
-├─────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  module/                                                           │
-│  ├── __init__.py             # Public exports                    │
-│  ├── models.py              # Data models (Pydantic)            │
-│  ├── exceptions.py          # Module-specific exceptions         │
-│  ├── core.py                # Core functionality                 │
-│  ├── decorators.py          # Decorator implementations          │
-│  ├── handlers.py            # Event/operation handlers           │
-│  └── utils.py               # Utility functions                  │
-│                                                                 │
-│  # Global instances and factory functions                     │
-│  ├── get_<module>()         # Get singleton instance             │
-│  ├── reset_<module>()       # Reset global instance               │
-│  └── create_<module>()      # Create new instance                │
-│                                                                 │
-└─────────────────────────────────────────────────────────────┘
+├────────────────────────────────────────────────────────────────┤
+│                                                                │
+│  module/                                                       │
+│  ├── __init__.py             # Public exports                  │
+│  ├── models.py              # Data models (Pydantic)           │
+│  ├── exceptions.py          # Module-specific exceptions       │
+│  ├── core.py                # Core functionality               │
+│  ├── decorators.py          # Decorator implementations        │
+│  ├── handlers.py            # Event/operation handlers         │
+│  └── utils.py               # Utility functions                │
+│                                                                │
+│  # Global instances and factory functions                      │
+│  ├── get_<module>()         # Get singleton instance           │
+│  ├── reset_<module>()       # Reset global instance            │
+│  └── create_<module>()      # Create new instance              │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘
 ```
 
 ## 🔐 Authentication Module

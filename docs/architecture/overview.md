@@ -34,49 +34,49 @@ The MCP Platform Framework is designed with a **strict separation of concerns** 
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                           MCP Ecosystem                                        │
+│                           MCP Ecosystem                                     │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │                    MCP Platform Framework                              │   │
-│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌────────────┐ │   │
-│  │  │ Authentication│  │ Authorization│  │   Telemetry  │  │    Audit    │ │   │
-│  │  └─────────────┘  └─────────────┘  └─────────────┘  └────────────┘ │   │
-│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌────────────┐ │   │
-│  │  │  Config      │  │ Classification│  │   Errors    │  │Connectivity │ │   │
-│  │  └─────────────┘  └─────────────┘  └─────────────┘  └────────────┘ │   │
-│  │  ┌─────────────────────────────────────────────────────────────────┐│   │
-│  │  │                    Registration & Discovery                        ││   │
-│  │  └─────────────────────────────────────────────────────────────────┘│   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│                              ││││││││││││││││                                  │
+│                                                                             │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │                    MCP Platform Framework                            │   │
+│  │  ┌───────────────┐  ┌──────────────┐  ┌─────────────┐  ┌───────────┐ │   │
+│  │  │ Authentication│  │ Authorization│  │   Telemetry │  │    Audit  │ │   │
+│  │  └───────────────┘  └──────────────┘  └─────────────┘  └───────────┘ │   │
+│  │  ┌─────────────┐  ┌───────────────┐  ┌─────────────┐  ┌────────────┐ │   │
+│  │  │  Config     │  │ Classification│  │   Errors    │  │Connectivity│ │   │
+│  │  └─────────────┘  └───────────────┘  └─────────────┘  └────────────┘ │   │
+│  │  ┌─────────────────────────────────────────────────────────────────┐ │   │
+│  │  │                    Registration & Discovery                     │ │   │
+│  │  └─────────────────────────────────────────────────────────────────┘ │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│                              ││││││││││││││││                               │
 │                              ▼▼▼▼▼▼▼▼▼▼▼▼▼                                  │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │                      Domain Repositories                               │   │
-│  │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐    │   │
-│  │  │  DonorManagement │  │     Finance      │  │     Supply       │    │   │
-│  │  │                 │  │                 │  │                 │    │   │
-│  │  │  • Business Logic│  │  • Business Logic│  │  • Business Logic│    │   │
-│  │  │  • Ontologies    │  │  • Ontologies    │  │  • Ontologies    │    │   │
-│  │  │  • Semantic Defs│  │  • Semantic Defs│  │  • Semantic Defs│    │   │
-│  │  │  • Tools         │  │  • Tools         │  │  • Tools         │    │   │
-│  │  └─────────────────┘  └─────────────────┘  └─────────────────┘    │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│                              │                                                  │
-│                              ▼                                                  │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │                    Microsoft Azure                                     │   │
-│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  │   │
-│  │  │ Function App │  │    Fabric    │  │ Key Vault   │  │App Insights │  │   │
-│  │  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘  │   │
-│  │  ┌─────────────┐  ┌─────────────────────────────────────────────┐  │   │
-│  │  │Storage Account│  │        Microsoft Fabric Services             │  │   │
-│  │  └─────────────┘  │  • Semantic Models (Power BI)                │  │   │
-│  │                   │  • Warehouses (SQL)                            │  │   │
-│  │                   │  • Lakehouses (Delta/Parquet)                  │  │   │
-│  │                   └─────────────────────────────────────────────┘  │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│                                                                              │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │                      Domain Repositories                             │   │
+│  │  ┌──────────────────┐  ┌──────────────────┐  ┌─────────────────┐     │   │
+│  │  │  DonorManagement │  │     Finance      │  │     Supply      │     │   │
+│  │  │                  │  │                  │  │                 │     │   │
+│  │  │  • Business Logic│  │  • Business Logic│  │ • Business Logic│     │   │
+│  │  │  • Ontologies    │  │  • Ontologies    │  │ • Ontologies    │     │   │
+│  │  │  • Semantic Defs │  │  • Semantic Defs │  │ • Semantic Defs │     │   │
+│  │  │  • Tools         │  │  • Tools         │  │ • Tools         │     │   │
+│  │  └──────────────────┘  └──────────────────┘  └─────────────────┘     │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│                              │                                              │
+│                              ▼                                              │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │                    Microsoft Azure                                   │   │
+│  │  ┌──────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐ │   │
+│  │  │ Function App │  │    Fabric   │  │ Key Vault   │  │App Insights │ │   │
+│  │  └──────────────┘  └─────────────┘  └─────────────┘  └─────────────┘ │   │
+│  │  ┌───────────────┐  ┌─────────────────────────────────────────────┐  │   │
+│  │  │Storage Account│  │        Microsoft Fabric Services            │  │   │
+│  │  └───────────────┘  │  • Semantic Models (Power BI)               │  │   │
+│  │                     │  • Warehouses (SQL)                         │  │   │
+│  │                     │  • Lakehouses (Delta/Parquet)               │  │   │
+│  │                     └─────────────────────────────────────────────┘  │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -87,20 +87,20 @@ The MCP Platform Framework is designed with a **strict separation of concerns** 
 The platform layer provides all infrastructure services that domains can consume:
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        PLATFORM LAYER                              │
-├─────────────────────────────────────────────────────────────────┤
+┌─────────────────────────────────────────────────────────────────────┐
+│                        PLATFORM LAYER                               │
+├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
 │  🔐 AUTHENTICATION                                                  │
-│  ├── EntraIDAuthenticator    # Azure AD authentication             │
+│  ├── EntraIDAuthenticator    # Azure AD authentication              │
 │  ├── ManagedIdentityAuth     # Managed Identity support             │
-│  ├── JWTValidator           # JWT token validation                 │
-│  └── Decorators             # @authenticated_tool, etc.            │
+│  ├── JWTValidator           # JWT token validation                  │
+│  └── Decorators             # @authenticated_tool, etc.             │
 │                                                                     │
 │  🛡️ AUTHORIZATION                                                   │
-│  ├── RBACEngine             # Role-Based Access Control            │
-│  ├── PolicyEnforcer         # Policy enforcement                    │
-│  └── Decorators             # @requires_permission, @requires_role  │
+│  ├── RBACEngine            # Role-Based Access Control              │
+│  ├── PolicyEnforcer        # Policy enforcement                     │
+│  └── Decorators            # @requires_permission, @requires_role   │
 │                                                                     │
 │  📊 TELEMETRY                                                       │
 │  ├── TelemetryCollector     # Collects metrics and traces           │
@@ -114,23 +114,23 @@ The platform layer provides all infrastructure services that domains can consume
 │                                                                     │
 │  ❌ ERROR HANDLING                                                  │
 │  ├── ErrorHandler           # Standardized error handling           │
-│  ├── ExceptionHierarchy     # Platform-specific exceptions           │
+│  ├── ExceptionHierarchy     # Platform-specific exceptions          │
 │  └── ErrorCodes             # Standardized error codes              │
 │                                                                     │
 │  ⚙️ CONFIGURATION                                                   │
-│  ├── ConfigManager          # Environment-aware configuration        │
-│  ├── ConfigLoader           # Loads from files, env vars, Key Vault  │
-│  └── KeyVaultClient         # Azure Key Vault integration            │
+│  ├── ConfigManager          # Environment-aware configuration       │
+│  ├── ConfigLoader           # Loads from files, env vars, Key Vault │
+│  └── KeyVaultClient         # Azure Key Vault integration           │
 │                                                                     │
 │  🏷️ CLASSIFICATION                                                  │
 │  ├── ClassificationEngine   # Policy enforcement                    │
-│  ├── ClassificationLevels   # PUBLIC, INTERNAL, CONFIDENTIAL, etc.   │
-│  └── Decorators             # @classification, @classify_data        │
+│  ├── ClassificationLevels   # PUBLIC, INTERNAL, CONFIDENTIAL, etc.  │
+│  └── Decorators             # @classification, @classify_data       │
 │                                                                     │
 │  🔧 REGISTRATION                                                    │
 │  ├── ToolRegistry           # Central tool registry                 │
 │  ├── ToolDiscovery          # Automatic tool discovery              │
-│  └── Decorators             # @tool, @resource, @query, @action      │
+│  └── Decorators             # @tool, @resource, @query, @action     │
 │                                                                     │
 │  🔗 CONNECTIVITY                                                    │
 │  ├── FabricClient           # Fabric management client              │
@@ -139,7 +139,7 @@ The platform layer provides all infrastructure services that domains can consume
 │  ├── LakehouseClient        # Fabric lakehouse access               │
 │  └── FabricConnectors       # Unified interface                     │
 │                                                                     │
-└─────────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Domain Layer
@@ -147,34 +147,34 @@ The platform layer provides all infrastructure services that domains can consume
 The domain layer contains business-specific implementations:
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        DOMAIN LAYER (e.g., DonorManagement)        │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                     │
-│  tools/                                                             │
-│  ├── __init__.py                  # Tool exports                     │
-│  ├── donor_tools.py               # Donor-specific tools             │
-│  ├── portfolio_tools.py           # Portfolio tools                  │
-│  └── campaign_tools.py            # Campaign tools                   │
-│                                                                     │
-│  semantic_models/                                                  │
-│  ├── __init__.py                  # Model exports                    │
-│  ├── donor_model.py               # Donor semantic model access      │
-│  └── revenue_model.py             # Revenue semantic model access    │
-│                                                                     │
-│  tests/                                                            │
-│  ├── unit/                        # Unit tests                        │
-│  │   └── test_tools.py            # Tool unit tests                   │
-│  └── integration/                  # Integration tests                 │
-│      └── test_integration.py      # Integration tests                 │
-│                                                                     │
-│  config/                                                           │
-│  └── domain_config.py             # Domain-specific configuration     │
-│                                                                     │
-│  main.py                                                           │
+┌───────────────────────────────────────────────────────────────────┐
+│                        DOMAIN LAYER (e.g., DonorManagement)       │
+├───────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  tools/                                                           │
+│  ├── __init__.py                  # Tool exports                  │
+│  ├── donor_tools.py               # Donor-specific tools          │
+│  ├── portfolio_tools.py           # Portfolio tools               │
+│  └── campaign_tools.py            # Campaign tools                │
+│                                                                   │
+│  semantic_models/                                                 │
+│  ├── __init__.py                  # Model exports                 │
+│  ├── donor_model.py               # Donor semantic model access   │
+│  └── revenue_model.py             # Revenue semantic model access │
+│                                                                   │
+│  tests/                                                           │
+│  ├── unit/                        # Unit tests                    │
+│  │   └── test_tools.py            # Tool unit tests               │
+│  └── integration/                  # Integration tests            │
+│      └── test_integration.py      # Integration tests             │
+│                                                                   │
+│  config/                                                          │
+│  └── domain_config.py             # Domain-specific configuration │
+│                                                                   │
+│  main.py                                                          │
 │  # Function App entry point with framework initialization         │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────┘
+│                                                                   │
+└───────────────────────────────────────────────────────────────────┘
 ```
 
 ## 🔄 Data Flow
@@ -184,21 +184,21 @@ The domain layer contains business-specific implementations:
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
 │   Client    │────▶│  Function   │────▶│   MCP       │────▶│   Domain    │
-│ (MCP Client)│     │    App      │     │  Framework  │     │   Tools    │
+│ (MCP Client)│     │    App      │     │  Framework  │     │   Tools     │
 └─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘
        │                   │                   │                   │
        │                   │                   │                   │
        ▼                   ▼                   ▼                   ▼
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+┌─────────────┐     ┌─────────────┐     ┌───────────────┐     ┌─────────────┐
 │  Request    │     │  HTTP       │     │ Authentication│     │  Tool       │
-│ (MCP JSON)  │     │  Trigger    │     │ & Validation │     │ Execution   │
-└─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘
+│ (MCP JSON)  │     │  Trigger    │     │ & Validation  │     │ Execution   │
+└─────────────┘     └─────────────┘     └───────────────┘     └─────────────┘
        │                   │                   │                   │
        │                   │                   │                   │
        ▼                   ▼                   ▼                   ▼
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
 │  Response   │◀────│  HTTP       │◀────│  Telemetry  │◀────│  Result     │
-│ (MCP JSON)  │     │  Response   │     │  & Audit     │     │ (Processed) │
+│ (MCP JSON)  │     │  Response   │     │  & Audit    │     │ (Processed) │
 └─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘
 ```
 
@@ -277,12 +277,12 @@ The domain layer contains business-specific implementations:
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│   Request    │     │   RBAC      │     │  Identity   │
+│   Request   │     │   RBAC      │     │  Identity   │
 │             │     │   Engine    │     │  Context    │
 └──────────┬──┘     └──────────┬──┘     └──────────┬──┘
            │                   │                   │
            │  1. Check         │                   │
-           │  Permissions     │                   │
+           │  Permissions      │                   │
            │──────────────────▶│                   │
            │                   │  2. Get User      │
            │                   │  Permissions      │
@@ -301,23 +301,23 @@ The domain layer contains business-specific implementations:
 ### Data Classification Flow
 
 ```
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+┌─────────────┐     ┌───────────────┐     ┌─────────────┐
 │   Tool      │     │ Classification│     │  Policy     │
-│  Definition │     │   Engine     │     │  Store      │
-└──────────┬──┘     └──────────┬──┘     └──────────┬──┘
+│  Definition │     │   Engine      │     │  Store      │
+└──────────┬──┘     └──────────┬────┘     └────────┬────┘
            │                   │                   │
-           │  1. Get          │                   │
-           │  Classification  │                   │
+           │  1. Get           │                   │
+           │  Classification   │                   │
            │──────────────────▶│                   │
-           │                   │  2. Load         │
-           │                   │  Policies        │
+           │                   │  2. Load          │
+           │                   │  Policies         │
            │                   │──────────────────▶│
            │                   │                   │
-           │                   │  3. Enforce      │
-           │                   │  Policies        │
+           │                   │  3. Enforce       │
+           │                   │  Policies         │
            │                   │                   │
            │  4. Allow/Deny    │                   │
-           │  Access          │                   │
+           │  Access           │                   │
            │◀──────────────────│                   │
            │                   │                   │
            ▼                   ▼                   ▼
@@ -333,17 +333,17 @@ The domain layer contains business-specific implementations:
 │  Execution  │     │ Collector   │     │  Insights   │
 └──────────┬──┘     └──────────┬──┘     └──────────┬──┘
            │                   │                   │
-           │  1. Track        │                   │
-           │  Execution      │                   │
+           │  1. Track         │                   │
+           │  Execution        │                   │
            │──────────────────▶│                   │
            │                   │  2. Buffer        │
-           │                   │  Metrics         │
+           │                   │  Metrics          │
            │                   │                   │
-           │                   │  3. Export       │
+           │                   │  3. Export        │
            │                   │──────────────────▶│
            │                   │                   │
-           │                   │  4. Flush        │
-           │                   │  (Periodic)      │
+           │                   │  4. Flush         │
+           │                   │  (Periodic)       │
            │                   │                   │
            ▼                   ▼                   ▼
 ```
@@ -356,17 +356,17 @@ The domain layer contains business-specific implementations:
 │  Execution  │     │ Logger      │     │ Storage     │
 └──────────┬──┘     └──────────┬──┘     └──────────┬──┘
            │                   │                   │
-           │  1. Log          │                   │
-           │  Access         │                   │
+           │  1. Log           │                   │
+           │  Access           │                   │
            │──────────────────▶│                   │
-           │                   │  2. Create       │
-           │                   │  Audit Record    │
+           │                   │  2. Create        │
+           │                   │  Audit Record     │
            │                   │                   │
-           │                   │  3. Write        │
+           │                   │  3. Write         │
            │                   │──────────────────▶│
            │                   │                   │
-           │                   │  4. Flush        │
-           │                   │  (Periodic)      │
+           │                   │  4. Flush         │
+           │                   │  (Periodic)       │
            │                   │                   │
            ▼                   ▼                   ▼
 ```
@@ -382,18 +382,18 @@ The domain layer contains business-specific implementations:
 └──────────┬──┘     │ Client      │     │             │
            │        └──────────┬──┘     └──────────┬──┘
            │                   │                   │
-           │  1. Execute      │                   │
-           │  Query          │                   │
+           │  1. Execute       │                   │
+           │  Query            │                   │
            │──────────────────▶│                   │
-           │                   │  2. Translate    │
-           │                   │  to DAX/XMLA     │
+           │                   │  2. Translate     │
+           │                   │  to DAX/XMLA      │
            │                   │──────────────────▶│
            │                   │                   │
-           │                   │  3. Get Results  │
+           │                   │  3. Get Results   │
            │                   │◀──────────────────│
            │                   │                   │
-           │  4. Return       │                   │
-           │  Data           │                   │
+           │  4. Return        │                   │
+           │  Data             │                   │
            │◀──────────────────│                   │
            │                   │                   │
            ▼                   ▼                   ▼
@@ -407,19 +407,19 @@ The domain layer contains business-specific implementations:
 │   Tool      │     │ Client      │     │ Endpoint    │
 └──────────┬──┘     └──────────┬──┘     └──────────┬──┘
            │                   │                   │
-           │  1. Execute      │                   │
-           │  SQL Query      │                   │
+           │  1. Execute       │                   │
+           │  SQL Query        │                   │
            │──────────────────▶│                   │
-           │                   │  2. Connect to   │
-           │                   │  Endpoint        │
+           │                   │  2. Connect to    │
+           │                   │  Endpoint         │
            │                   │──────────────────▶│
            │                   │                   │
-           │                   │  3. Execute      │
-           │                   │  Query           │
+           │                   │  3. Execute       │
+           │                   │  Query            │
            │                   │──────────────────▶│
            │                   │                   │
-           │  4. Return       │                   │
-           │  Results        │                   │
+           │  4. Return        │                   │
+           │  Results          │                   │
            │◀──────────────────│                   │
            │                   │                   │
            ▼                   ▼                   ▼

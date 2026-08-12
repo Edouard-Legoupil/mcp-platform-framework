@@ -14,17 +14,17 @@ The Fabric Connectivity Module handles:
 
 ```
 ┌─────────────────────────────────────────┐
-│       Fabric Connectivity Module         │
+│       Fabric Connectivity Module        │
 ├─────────────────────────────────────────┤
-│  ┌─────────────────┐  ┌─────────────────┐ │
-│  │ Semantic Model  │  │ Warehouse       │ │
-│  │ Connectors      │  │ Connectors      │ │
-│  └─────────────────┘  └─────────────────┘ │
-│  ┌─────────────────┐  ┌─────────────────┐ │
-│  │ Lakehouse       │  │ Fabric          │ │
-│  │ Connectors      │  │ Endpoint        │ │
-│  └─────────────────┘  │ Adapters        │ │
-│                      └─────────────────┘ │
+│  ┌─────────────────┐  ┌───────────────┐ │
+│  │ Semantic Model  │  │ Warehouse     │ │
+│  │ Connectors      │  │ Connectors    │ │
+│  └─────────────────┘  └───────────────┘ │
+│  ┌─────────────────┐  ┌───────────────┐ │
+│  │ Lakehouse       │  │ Fabric        │ │
+│  │ Connectors      │  │ Endpoint      │ │
+│  └─────────────────┘  │ Adapters      │ │
+│                       └───────────────┘ │
 └─────────────────────────────────────────┘
 ```
 

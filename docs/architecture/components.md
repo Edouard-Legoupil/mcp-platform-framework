@@ -431,16 +431,16 @@ Provides data classification controls and governance policy enforcement.
 
 ```
 ┌─────────────────────────────────────────┐
-│       Data Classification Module         │
+│       Data Classification Module        │
 ├─────────────────────────────────────────┤
-│  ┌─────────────────┐  ┌─────────────────┐ │
-│  │ Classification  │  │ Governance      │ │
-│  │ Levels          │  │ Policy          │ │
-│  └─────────────────┘  │ Enforcement     │ │
-│                      └─────────────────┘ │
-│  ┌─────────────────────────────────────┐ │
-│  │         Framework Controls            │ │
-│  └─────────────────────────────────────┘ │
+│  ┌─────────────────┐  ┌───────────────┐ │
+│  │ Classification  │  │ Governance    │ │
+│  │ Levels          │  │ Policy        │ │
+│  └─────────────────┘  │ Enforcement   │ │
+│                       └───────────────┘ │
+│  ┌────────────────────────────────────┐ │
+│  │         Framework Controls         │ │
+│  └────────────────────────────────────┘ │
 └─────────────────────────────────────────┘
 ```
 
@@ -496,16 +496,16 @@ Provides automatic MCP tool discovery, registration, and metadata generation.
 
 ```
 ┌─────────────────────────────────────────┐
-│        Tool Registration Module          │
+│        Tool Registration Module         │
 ├─────────────────────────────────────────┤
-│  ┌─────────────────┐  ┌─────────────────┐ │
-│  │ Automatic       │  │ Metadata        │ │
-│  │ Discovery       │  │ Generation      │ │
-│  └─────────────────┘  └─────────────────┘ │
-│  ┌─────────────────┐  ┌─────────────────┐ │
-│  │ Tool           │  │ Registration     │ │
-│  │ Decorators     │  │ Management      │ │
-│  └─────────────────┘  └─────────────────┘ │
+│  ┌─────────────────┐  ┌───────────────┐ │
+│  │ Automatic       │  │ Metadata      │ │
+│  │ Discovery       │  │ Generation    │ │
+│  └─────────────────┘  └───────────────┘ │
+│  ┌─────────────────┐  ┌───────────────┐ │
+│  │ Tool            │  │ Registration  │ │
+│  │ Decorators      │  │ Management    │ │
+│  └─────────────────┘  └───────────────┘ │
 └─────────────────────────────────────────┘
 ```
 
@@ -571,17 +571,17 @@ Provides standardized connectors for Microsoft Fabric integration.
 
 ```
 ┌─────────────────────────────────────────┐
-│       Fabric Connectivity Module         │
+│       Fabric Connectivity Module        │
 ├─────────────────────────────────────────┤
-│  ┌─────────────────┐  ┌─────────────────┐ │
-│  │ Semantic Model  │  │ Warehouse       │ │
-│  │ Connectors      │  │ Connectors      │ │
-│  └─────────────────┘  └─────────────────┘ │
-│  ┌─────────────────┐  ┌─────────────────┐ │
-│  │ Lakehouse       │  │ Fabric          │ │
-│  │ Connectors      │  │ Endpoint        │ │
-│  └─────────────────┘  │ Adapters        │ │
-│                      └─────────────────┘ │
+│  ┌─────────────────┐  ┌───────────────┐ │
+│  │ Semantic Model  │  │ Warehouse     │ │
+│  │ Connectors      │  │ Connectors    │ │
+│  └─────────────────┘  └───────────────┘ │
+│  ┌─────────────────┐  ┌───────────────┐ │
+│  │ Lakehouse       │  │ Fabric        │ │
+│  │ Connectors      │  │ Endpoint      │ │
+│  └─────────────────┘  │ Adapters      │ │
+│                       └───────────────┘ │
 └─────────────────────────────────────────┘
 ```
 
@@ -634,16 +634,16 @@ Provides environment-aware configuration management with Azure Key Vault integra
 
 ```
 ┌─────────────────────────────────────────┐
-│      Configuration Management Module      │
+│      Configuration Management Module    │
 ├─────────────────────────────────────────┤
-│  ┌─────────────────┐  ┌─────────────────┐ │
-│  │ Environment     │  │ Key Vault       │ │
-│  │ Configuration   │  │ Integration     │ │
-│  └─────────────────┘  └─────────────────┘ │
-│  ┌─────────────────┐  ┌─────────────────┐ │
-│  │ Validation      │  │ Secret          │ │
-│  │                 │  │ Management      │ │
-│  └─────────────────┘  └─────────────────┘ │
+│  ┌─────────────────┐  ┌───────────────┐ │
+│  │ Environment     │  │ Key Vault     │ │
+│  │ Configuration   │  │ Integration   │ │
+│  └─────────────────┘  └───────────────┘ │
+│  ┌─────────────────┐  ┌───────────────┐ │
+│  │ Validation      │  │ Secret        │ │
+│  │                 │  │ Management    │ │
+│  └─────────────────┘  └───────────────┘ │
 └─────────────────────────────────────────┘
 ```
 
@@ -732,16 +732,16 @@ Provides CI/CD pipeline templates and deployment automation for Azure Function A
 
 ```
 ┌─────────────────────────────────────────┐
-│          Deployment Module                │
+│          Deployment Module              │
 ├─────────────────────────────────────────┤
-│  ┌─────────────────┐  ┌─────────────────┐ │
-│  │ Build           │  │ Testing         │ │
-│  │ Validation      │  │ Frameworks      │ │
-│  └─────────────────┘  └─────────────────┘ │
-│  ┌─────────────────┐  ┌─────────────────┐ │
-│  │ Security        │  │ Deployment      │ │
-│  │ Scanning        │  │ Pipelines       │ │
-│  └─────────────────┘  └─────────────────┘ │
+│  ┌─────────────────┐  ┌───────────────┐ │
+│  │ Build           │  │ Testing       │ │
+│  │ Validation      │  │ Frameworks    │ │
+│  └─────────────────┘  └───────────────┘ │
+│  ┌─────────────────┐  ┌───────────────┐ │
+│  │ Security        │  │ Deployment    │ │
+│  │ Scanning        │  │ Pipelines     │ │
+│  └─────────────────┘  └───────────────┘ │
 └─────────────────────────────────────────┘
 ```
 
@@ -778,16 +778,16 @@ Provides automatic registration of MCP services with the enterprise registry and
 
 ```
 ┌─────────────────────────────────────────┐
-│        Catalog Integration Module         │
+│        Catalog Integration Module       │
 ├─────────────────────────────────────────┤
-│  ┌─────────────────┐  ┌─────────────────┐ │
-│  │ Service         │  │ Metadata        │ │
-│  │ Registration    │  │ Generation      │ │
-│  └─────────────────┘  └─────────────────┘ │
-│  ┌─────────────────┐  ┌─────────────────┐ │
-│  │ Governance      │  │ Enterprise      │ │
-│  │ Catalog         │  │ Registry        │ │
-│  └─────────────────┘  └─────────────────┘ │
+│  ┌─────────────────┐  ┌───────────────┐ │
+│  │ Service         │  │ Metadata      │ │
+│  │ Registration    │  │ Generation    │ │
+│  └─────────────────┘  └───────────────┘ │
+│  ┌─────────────────┐  ┌───────────────┐ │
+│  │ Governance      │  │ Enterprise    │ │
+│  │ Catalog         │  │ Registry      │ │
+│  └─────────────────┘  └───────────────┘ │
 └─────────────────────────────────────────┘
 ```
 
@@ -827,7 +827,7 @@ Automatically generates technical documentation from tool metadata and annotatio
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                        Request Processing Flow                         │
+│                        Request Processing Flow                      │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
 │  1. Request Arrives                                                 │
@@ -839,28 +839,28 @@ Automatically generates technical documentation from tool metadata and annotatio
 │                                                                     │
 │  3. Authorization                                                   │
 │     └── @requires_permission checks user permissions                │
-│     └── Validates access to requested resource                       │
+│     └── Validates access to requested resource                      │
 │                                                                     │
 │  4. Classification Check                                            │
 │     └── @classification verifies data access level                  │
-│     └── Enforces governance policies                                 │
+│     └── Enforces governance policies                                │
 │                                                                     │
 │  5. Telemetry Start                                                 │
 │     └── Automatic telemetry collection begins                       │
-│     └── Request context captured                                     │
+│     └── Request context captured                                    │
 │                                                                     │
 │  6. Tool Execution                                                  │
 │     └── Domain logic executes                                       │
-│     └── Fabric connectors used for data access                     │
+│     └── Fabric connectors used for data access                      │
 │     └── Semantic models queried                                     │
 │                                                                     │
 │  7. Audit Logging (if sensitive)                                    │
 │     └── Immutable audit record created                              │
-│     └── Compliance monitoring triggered                              │
+│     └── Compliance monitoring triggered                             │
 │                                                                     │
 │  8. Telemetry End                                                   │
-│     └── Duration and status captured                                 │
-│     └── Token usage tracked                                          │
+│     └── Duration and status captured                                │
+│     └── Token usage tracked                                         │
 │                                                                     │
 │  9. Response Returned                                               │
 │     └── Formatted response sent to client                           │

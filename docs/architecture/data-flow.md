@@ -8,11 +8,11 @@ The MCP Platform Framework follows a **pipeline architecture** where each reques
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                        DATA FLOW PIPELINE                              │
+│                        DATA FLOW PIPELINE                           │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
-│  REQUEST → [Ingress] → [Auth] → [AuthZ] → [Classification] → [Telemetry]│
-│                   → [Domain Logic] → [Fabric] → [Audit] → RESPONSE      │
+│  REQUEST → [Ingress] → [Auth] → [AuthZ] → [Classification]          |
+|  → [Telemetry] → [Domain Logic] → [Fabric] → [Audit] → RESPONSE     │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
@@ -826,47 +826,47 @@ async def process_tool_call(request: MCPRequest) -> MCPResponse:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                    COMPLETE DATA FLOW DIAGRAM                           │
+│                    COMPLETE DATA FLOW DIAGRAM                       │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
-│  ┌─────────────┐     ┌─────────────┐     ┌─────────────┐              │
-│  │   HTTP      │────▶│  MCP Request │────▶│  Request     │              │
-│  │  Request    │     │   Parsing    │     │  Context     │              │
-│  └─────────────┘     └─────────────┘     └──────────┬────┘              │
-│                                                    │                    │
-│                                                    ▼                    │
-│  ┌─────────────────────────────────────────────────────────────┐   │
-│  │                    PIPELINE STAGES                            │   │
-│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐            │   │
-│  │  │ Authentication│─▶│ Authorization │─▶│Classification│            │   │
-│  │  └─────────────┘  └─────────────┘  └─────────────┘            │   │
-│  │       │               │               │                        │   │
-│  │       ▼               ▼               ▼                        │   │
-│  │  ┌─────────────────────────────────────────────────────┐    │   │
-│  │  │              CONTEXT ENRICHMENT                        │    │   │
-│  │  │  - Caller identity added by Authentication             │    │   │
-│  │  │  - Permissions validated by Authorization              │    │   │
-│  │  │  - Classification level set by Classification           │    │   │
-│  │  └─────────────────────────────────────────────────────┘    │   │
-│  │                                                        │            │   │
-│  │                                                        ▼            │   │
-│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐            │   │
-│  │  │  Telemetry  │─▶│ Domain Logic │─▶│   Fabric    │            │   │
-│  │  │   Start     │  │  Execution   │  │ Integration │            │   │
-│  │  └─────────────┘  └─────────────┘  └─────────────┘            │   │
-│  │                                                        │            │   │
-│  │                                                        ▼            │   │
-│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐            │   │
-│  │  │   Audit     │◀─│  Telemetry  │◀─│   Response   │            │   │
-│  │  │  Logging    │  │  Completion │  │  Generation  │            │   │
-│  │  └─────────────┘  └─────────────┘  └─────────────┘            │   │
-│  └─────────────────────────────────────────────────────────────┘   │
-│                                                    │                    │
-│                                                    ▼                    │
-│  ┌─────────────┐     ┌─────────────┐     ┌─────────────┐              │
-│  │   HTTP      │◀────│  MCP        │◀────│  Error       │              │
-│  │  Response   │     │  Response    │     │  Handling    │              │
-│  └─────────────┘     └─────────────┘     └─────────────┘              │
+│  ┌─────────────┐     ┌──────────────┐     ┌─────────────┐           │
+│  │   HTTP      │────▶│  MCP Request │────▶│  Request    │           │
+│  │  Request    │     │   Parsing    │     │  Context    │           │
+│  └─────────────┘     └──────────────┘     └──────────┬──┘           │
+│                                                    │                │
+│                                                    ▼                │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │                    PIPELINE STAGES                           │   │
+│  │  ┌───────────────┐  ┌───────────────┐  ┌──────────────┐      │   │
+│  │  │ Authentication│─▶│ Authorization │─▶│Classification│      │   │
+│  │  └───────────────┘  └───────────────┘  └──────────────┘      │   │
+│  │       │               │               │                      │   │
+│  │       ▼               ▼               ▼                      │   │
+│  │  ┌──────────────────────────────────────────────────────┐    │   │
+│  │  │              CONTEXT ENRICHMENT                      │    │   │
+│  │  │  - Caller identity added by Authentication           │    │   │
+│  │  │  - Permissions validated by Authorization            │    │   │
+│  │  │  - Classification level set by Classification        │    │   │
+│  │  └──────────────────────────────────────────────────────┘    │   │
+│  │                                                        │     │   │
+│  │                                                        ▼     │   │
+│  │  ┌─────────────┐  ┌──────────────┐  ┌─────────────┐          │   │
+│  │  │  Telemetry  │─▶│ Domain Logic │─▶│   Fabric    │          │   │
+│  │  │   Start     │  │  Execution   │  │ Integration │          │   │
+│  │  └─────────────┘  └──────────────┘  └─────────────┘          │   │
+│  │                                                        │     │   │
+│  │                                                        ▼     │   │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌──────────────┐          │   │
+│  │  │   Audit     │◀─│  Telemetry  │◀─│   Response   │          │   │
+│  │  │  Logging    │  │  Completion │  │  Generation  │          │   │
+│  │  └─────────────┘  └─────────────┘  └──────────────┘          │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                                                    │                │
+│                                                    ▼                │
+│  ┌─────────────┐     ┌─────────────┐     ┌──────────────┐           │
+│  │   HTTP      │◀────│  MCP        │◀────│  Error       │           │
+│  │  Response   │     │  Response    │    │   Handling   │           │
+│  └─────────────┘     └─────────────┘     └──────────────┘           │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
@@ -956,11 +956,11 @@ class FabricConnectionPool:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                    SECURITY CHECKPOINTS                                  │
+│                    SECURITY CHECKPOINTS                             │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
 │  1. INGRESS SECURITY                                                │
-│     ├── TLS validation                                             │
+│     ├── TLS validation                                              │
 │     ├── Rate limiting                                               │
 │     ├── IP allowlisting (optional)                                  │
 │     └── Request size limits                                         │
@@ -985,8 +985,8 @@ class FabricConnectionPool:
 │                                                                     │
 │  5. DATA ACCESS SECURITY                                            │
 │     ├── Semantic model access controls                              │
-│     ├── Warehouse access validation                                  │
-│     ├── Lakehouse access validation                                  │
+│     ├── Warehouse access validation                                 │
+│     ├── Lakehouse access validation                                 │
 │     └── Query validation                                            │
 │                                                                     │
 │  6. EGRESS SECURITY                                                 │
