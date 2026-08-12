@@ -37,31 +37,31 @@ You're setting up the deployment pipeline and infrastructure. You want to:
 Before diving in, understand the key components:
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    Your Domain Repository                     │
-├─────────────────────────────────────────────────────────────┤
-│  tools/           │  semantic_models/  │  tests/           │
-│  - get_donor.py  │  - portfolio.py     │  - test_tools.py  │
-│  - update_donor.py│  - revenue.py       │  - test_integration.py│
-└─────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────┐
+│                    Your Domain Repository                             │
+├───────────────────────────────────────────────────────────────────────┤
+│  tools/           │  semantic_models/  │  tests/                      │
+│  - get_donor.py   │  - portfolio.py    │  - test_tools.py             │
+│  - update_donor.py│  - revenue.py      │  - test_integration.py       │
+└───────────────────────────────────────────────────────────────────────┘
                               │
                               ▼
-┌─────────────────────────────────────────────────────────────┐
-│                 MCP Platform Framework                       │
-├─────────────────────────────────────────────────────────────┤
-│  Authentication  │  Authorization  │  Telemetry  │  Audit      │
-│  Configuration  │  Classification │  Connectivity│  Registration │
-└─────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────┐
+│                 MCP Platform Framework                                │
+├───────────────────────────────────────────────────────────────────────┤
+│  Authentication │  Authorization  │  Telemetry   │  Audit             │
+│  Configuration  │  Classification │  Connectivity│  Registration      │
+└───────────────────────────────────────────────────────────────────────┘
                               │
                               ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    Microsoft Azure                            │
-├─────────────────────────────────────────────────────────────┤
-│  Function App     │  Fabric           │  Key Vault    │  App Insights│
+┌───────────────────────────────────────────────────────────────────────┐
+│                    Microsoft Azure                                    │
+├───────────────────────────────────────────────────────────────────────┤
+│  Function App     │  Fabric           │  Key Vault     │ App Insights │
 │  Storage Account  │  - Semantic Models│  - Secrets     │  - Telemetry │
 │  Managed Identity │  - Warehouses     │  - Certificates│  - Logs      │
 │                   │  - Lakehouses     │                │              │
-└─────────────────────────────────────────────────────────────┘
+└───────────────────────────────────────────────────────────────────────┘
 ```
 
 ## 🎯 Key Concepts
