@@ -22,12 +22,12 @@
 - [Authentication](modules/authentication.md)
 - [Authorization](modules/authorization.md)
 - [Telemetry](modules/telemetry.md)
-- [Audit Logging](modules/audit.md)
-- [Error Handling](modules/errors.md)
-- [Configuration](modules/configuration.md)
-- [Classification](modules/classification.md)
-- [Registration](modules/registration.md)
-- [Connectivity](modules/connectivity.md)
+- [Audit Logging](modules/audit-logging.md)
+- [Error Handling](modules/error-handling.md)
+- [Configuration Management](modules/configuration-management.md)
+- [Data Classification](modules/data-classification.md)
+- [Tool Registration](modules/tool-registration.md)
+- [Fabric Connectivity](modules/fabric-connectivity.md)
 - [Framework Integration](modules/framework.md)
 
 ### Deployment
