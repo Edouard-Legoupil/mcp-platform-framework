@@ -21,48 +21,48 @@ The MCP Platform Framework provides a comprehensive infrastructure layer for imp
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    MCP Platform Framework                      │
+│                    MCP Platform Framework                   │
 ├─────────────────────────────────────────────────────────────┤
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐        │
-│  │ Authentication│  │ Authorization │  │  Telemetry   │        │
-│  │  (Entra ID,  │  │   (RBAC,     │  │ (Auto-collect│        │
-│  │   JWT, etc.) │  │  Policies)    │  │  tool calls) │        │
-│  └──────────────┘  └──────────────┘  └──────────────┘        │
-│                                                               │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐        │
-│  │   Audit      │  │   Error       │  │ Classification│        │
-│  │  (Immutable  │  │  Handling     │  │  (Data        │        │
-│  │   logs)      │  │  (Standardized│  │   controls)   │        │
-│  └──────────────┘  └──────────────┘  └──────────────┘        │
-│                                                               │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
+│  │Authentication│  │ Authorization│  │  Telemetry   │       │
+│  │  (Entra ID,  │  │   (RBAC,     │  │ (Auto-collect│       │
+│  │   JWT, etc.) │  │  Policies)   │  │  tool calls) │       │
+│  └──────────────┘  └──────────────┘  └──────────────┘       │
+│                                                             │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
+│  │   Audit      │  │   Error      │  │Classification│       │
+│  │  (Immutable  │  │  Handling    │  │ (Data        │       │
+│  │   logs)      │  │ (Standardized│  │  controls)   │       │
+│  └──────────────┘  └──────────────┘  └──────────────┘       │
+│                                                             │
 │  ┌─────────────────────────────────────────────────────────┐│
-│  │                    Connectivity Layer                      ││
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ││
-│  │  │ Semantic    │  │  Warehouse    │  │  Lakehouse    │  ││
-│  │  │  Models     │  │  (SQL)        │  │  (Delta)      │  ││
-│  │  └──────────────┘  └──────────────┘  └──────────────┘  ││
+│  │                    Connectivity Layer                   ││
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   |│
+│  │  │ Semantic     │  │  Warehouse   │  │  Lakehouse   │   ││
+│  │  │  Models      │  │  (SQL)       │  │  (Delta)     │   ││
+│  │  └──────────────┘  └──────────────┘  └──────────────┘   ││
 │  └─────────────────────────────────────────────────────────┘│
-│                                                               │
+│                                                             │
 │  ┌─────────────────────────────────────────────────────────┐│
-│  │                    Tool Registration                        ││
-│  │  - Auto-discovery from domain modules                     ││
-│  │  - Metadata generation                                     ││
-│  │  - MCP server integration                                  ││
+│  │                    Tool Registration                    ││
+│  │  - Auto-discovery from domain modules                   ││
+│  │  - Metadata generation                                  ││
+│  │  - MCP server integration                               ││
 │  └─────────────────────────────────────────────────────────┘│
 └─────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────┐
-│                    Domain Repositories                         │
-│  (Created from template - no forking between domains)          │
-│                                                               │
-│  mcp-donor-management-domain/                                │
-│  ├── tools/                  # Domain-specific tools          │
-│  ├── semantic_models/        # Semantic model access          │
-│  ├── tests/                 # Domain tests                   │
-│  ├── docs/                  # Domain documentation           │
-│  ├── config/                # Environment configs            │
-│  ├── metadata/              # Domain metadata                │
-│  └── pipelines/             # CI/CD pipelines                │
+│                    Domain Repositories                      │
+│  (Created from template - no forking between domains)       │
+│                                                             │
+│  mcp-donor-management-domain/                               │
+│  ├── tools/                  # Domain-specific tools        │
+│  ├── semantic_models/        # Semantic model access        │
+│  ├── tests/                 # Domain tests                  │
+│  ├── docs/                  # Domain documentation          │
+│  ├── config/                # Environment configs           │
+│  ├── metadata/              # Domain metadata               │
+│  └── pipelines/             # CI/CD pipelines               │
 └─────────────────────────────────────────────────────────────┘
 ```
 
