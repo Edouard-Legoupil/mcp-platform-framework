@@ -9,12 +9,12 @@ The MCP Platform Framework consists of several specialized modules, each handlin
 | **[Authentication](authentication.md)** | Identity verification and token management | Entra ID, Managed Identity, JWT validation | `@authenticated_tool` |
 | **[Authorization](authorization.md)** | Access control and permission management | RBAC, policy enforcement | `@requires_permission`, `@requires_role` |
 | **[Telemetry](telemetry.md)** | Observability and monitoring | Application Insights, automatic tracking | `@track_tool_telemetry` |
-| **[Audit](audit.md)** | Compliance logging | Immutable logs, Azure Blob Storage | `@audit_tool_access`, `@audit_data_access` |
-| **[Errors](errors.md)** | Error handling and standardization | Error codes, exception hierarchy | - |
-| **[Configuration](configuration.md)** | Environment-aware settings | Key Vault, multi-source config | - |
-| **[Classification](classification.md)** | Data governance | Classification levels, policy enforcement | `@classification`, `@classify_data` |
-| **[Registration](registration.md)** | Tool discovery and registration | Automatic discovery, metadata generation | `@tool`, `@resource`, `@query`, `@action` |
-| **[Connectivity](connectivity.md)** | Fabric integration | Semantic models, warehouses, lakehouses | - |
+| **[Audit](audit-logging.md)** | Compliance logging | Immutable logs, Azure Blob Storage | `@audit_tool_access`, `@audit_data_access` |
+| **[Errors](error-handling.md)** | Error handling and standardization | Error codes, exception hierarchy | - |
+| **[Configuration](configuration-management.md)** | Environment-aware settings | Key Vault, multi-source config | - |
+| **[Classification](data-classification.md)** | Data governance | Classification levels, policy enforcement | `@classification`, `@classify_data` |
+| **[Registration](tool-registration.md)** | Tool discovery and registration | Automatic discovery, metadata generation | `@tool`, `@resource`, `@query`, `@action` |
+| **[Connectivity](fabric-connectivity.md)** | Fabric integration | Semantic models, warehouses, lakehouses | - |
 | **[Framework](framework.md)** | Main integration | Unified interface, lifecycle management | - |
 
 ## 🎯 Module Architecture
@@ -152,7 +152,7 @@ audit = get_audit_logger()
 audit.log_tool_access(user="user@example.com", tool="sensitive_tool", success=True)
 ```
 
-📖 **[Full Documentation](audit.md)**
+📖 **[Full Documentation](audit-logging.md)**
 
 ---
 
@@ -183,7 +183,7 @@ error_handler = get_error_handler()
 response = error_handler.handle_error(exception)
 ```
 
-📖 **[Full Documentation](errors.md)**
+📖 **[Full Documentation](error-handling.md)**
 
 ---
 
@@ -212,7 +212,7 @@ fabric_config = config.get_fabric_config()
 print(fabric_config.workspace_id)
 ```
 
-📖 **[Full Documentation](configuration.md)**
+📖 **[Full Documentation](configuration-management.md)**
 
 ---
 
@@ -241,7 +241,7 @@ def get_public_data():
     pass
 ```
 
-📖 **[Full Documentation](classification.md)**
+📖 **[Full Documentation](data-classification.md)**
 
 ---
 
@@ -280,7 +280,7 @@ def update_donor(donor_id: str, data: dict):
     pass
 ```
 
-📖 **[Full Documentation](registration.md)**
+📖 **[Full Documentation](tool-registration.md)**
 
 ---
 
@@ -312,7 +312,7 @@ result = lakehouse.execute("SELECT * FROM Pipeline")
 workspace = fabric.get_workspace()
 ```
 
-📖 **[Full Documentation](connectivity.md)**
+📖 **[Full Documentation](fabric-connectivity.md)**
 
 ---
 
@@ -375,47 +375,47 @@ framework = initialize_framework(
 - [Decorators](telemetry.md#decorators)
 
 ### Audit
-- [Overview](audit.md)
-- [Audit Logger](audit.md#audit-logger)
-- [Storage Backends](audit.md#storage-backends)
-- [Audit Records](audit.md#audit-records)
-- [Decorators](audit.md#decorators)
+- [Overview](audit-logging.md)
+- [Audit Logger](audit-logging.md#audit-logger)
+- [Storage Backends](audit-logging.md#storage-backends)
+- [Audit Records](audit-logging.md#audit-records)
+- [Decorators](audit-logging.md#decorators)
 
 ### Errors
-- [Overview](errors.md)
-- [Error Handler](errors.md#error-handler)
-- [Exception Hierarchy](errors.md#exception-hierarchy)
-- [Error Codes](errors.md#error-codes)
-- [Error Responses](errors.md#error-responses)
+- [Overview](error-handling.md)
+- [Error Handler](error-handling.md#error-handler)
+- [Exception Hierarchy](error-handling.md#exception-hierarchy)
+- [Error Codes](error-handling.md#error-codes)
+- [Error Responses](error-handling.md#error-responses)
 
 ### Configuration
-- [Overview](configuration.md)
-- [Config Manager](configuration.md#config-manager)
-- [Config Loader](configuration.md#config-loader)
-- [Configuration Sources](configuration.md#configuration-sources)
-- [Environment Configuration](configuration.md#environment-configuration)
+- [Overview](configuration-management.md)
+- [Config Manager](configuration-management.md#config-manager)
+- [Config Loader](configuration-management.md#config-loader)
+- [Configuration Sources](configuration-management.md#configuration-sources)
+- [Environment Configuration](configuration-management.md#environment-configuration)
 
 ### Classification
-- [Overview](classification.md)
-- [Classification Engine](classification.md#classification-engine)
-- [Classification Levels](classification.md#classification-levels)
-- [Policies](classification.md#policies)
-- [Decorators](classification.md#decorators)
+- [Overview](data-classification.md)
+- [Classification Engine](data-classification.md#classification-engine)
+- [Classification Levels](data-classification.md#classification-levels)
+- [Policies](data-classification.md#policies)
+- [Decorators](data-classification.md#decorators)
 
 ### Registration
-- [Overview](registration.md)
-- [Tool Registry](registration.md#tool-registry)
-- [Tool Discovery](registration.md#tool-discovery)
-- [Tool Metadata](registration.md#tool-metadata)
-- [Decorators](registration.md#decorators)
+- [Overview](tool-registration.md)
+- [Tool Registry](tool-registration.md#tool-registry)
+- [Tool Discovery](tool-registration.md#tool-discovery)
+- [Tool Metadata](tool-registration.md#tool-metadata)
+- [Decorators](tool-registration.md#decorators)
 
 ### Connectivity
-- [Overview](connectivity.md)
-- [Fabric Client](connectivity.md#fabric-client)
-- [Semantic Model Client](connectivity.md#semantic-model-client)
-- [Warehouse Client](connectivity.md#warehouse-client)
-- [Lakehouse Client](connectivity.md#lakehouse-client)
-- [Unified Connectors](connectivity.md#unified-connectors)
+- [Overview](fabric-connectivity.md)
+- [Fabric Client](fabric-connectivity.md#fabric-client)
+- [Semantic Model Client](fabric-connectivity.md#semantic-model-client)
+- [Warehouse Client](fabric-connectivity.md#warehouse-client)
+- [Lakehouse Client](fabric-connectivity.md#lakehouse-client)
+- [Unified Connectors](fabric-connectivity.md#unified-connectors)
 
 ### Framework
 - [Overview](framework.md)
@@ -569,5 +569,5 @@ raise MCPError(
 - **[Authentication Module](authentication.md)** - Deep dive into authentication
 - **[Authorization Module](authorization.md)** - Learn about RBAC and permissions
 - **[Telemetry Module](telemetry.md)** - Set up monitoring and observability
-- **[Connectivity Module](connectivity.md)** - Integrate with Microsoft Fabric
+- **[Connectivity Module](fabric-connectivity.md)** - Integrate with Microsoft Fabric
 - **[Framework Module](framework.md)** - Main integration and usage patterns
