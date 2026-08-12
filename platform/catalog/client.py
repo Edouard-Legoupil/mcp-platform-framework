@@ -56,7 +56,7 @@ class CatalogClient:
         catalog_config = config_manager.get_config("catalog")
         
         return {
-            "endpoint": os.getenv("CATALOG_ENDPOINT", catalog_config.get("endpoint", "https://catalog.unhcr.org/api/v1")),
+            "endpoint": os.getenv("CATALOG_ENDPOINT", catalog_config.get("endpoint", "https://catalog.my-org.org/api/v1")),
             "api_key": os.getenv("CATALOG_API_KEY", catalog_config.get("api_key")),
             "timeout": int(os.getenv("CATALOG_TIMEOUT", catalog_config.get("timeout", 30))),
             "retry_count": int(os.getenv("CATALOG_RETRY_COUNT", catalog_config.get("retry_count", 3))),

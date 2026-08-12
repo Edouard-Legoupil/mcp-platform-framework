@@ -135,7 +135,7 @@ az functionapp config appsettings set \
         "MCP_ENVIRONMENT=prod" \
         "MCP_DOMAIN=DonorManagement" \
         "MCP_VERSION=1.0.0" \
-        "MCP_CATALOG_ENDPOINT=https://catalog.unhcr.org/api/v1" \
+        "MCP_CATALOG_ENDPOINT=https://catalog.my-org.org/api/v1" \
         "MCP_TELEMETRY_ENABLED=true" \
         "MCP_AUDIT_ENABLED=true" \
         "MCP_DEBUG=false"
@@ -587,7 +587,7 @@ auth_config = AuthConfig(
     entra_id_tenant_id=os.getenv("AZURE_TENANT_ID"),
     entra_id_client_id=os.getenv("AZURE_CLIENT_ID"),
     entra_id_client_secret=os.getenv("AZURE_CLIENT_SECRET"),
-    allowed_audiences=["api://mcp.unhcr.org"],
+    allowed_audiences=["api://mcp.my-org.org"],
     allowed_issuers=[f"https://login.microsoftonline.com/{os.getenv('AZURE_TENANT_ID')}/v2.0"]
 )
 
@@ -617,7 +617,7 @@ def tool_handler(req: func.HttpRequest, tool_name: str) -> func.HttpResponse:
 az functionapp cors add \
     --name $FUNCTION_APP \
     --resource-group $RESOURCE_GROUP \
-    --allowed-origins "https://unhcr.org" "https://portal.unhcr.org" "https://localhost:3000"
+    --allowed-origins "https://my-org.org" "https://portal.my-org.org" "https://localhost:3000"
 
 az functionapp cors add \
     --name $FUNCTION_APP \

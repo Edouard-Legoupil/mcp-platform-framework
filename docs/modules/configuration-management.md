@@ -56,7 +56,7 @@ CONFIG = Configuration(
         "Dev": EnvironmentConfig(
             domain="DonorManagement",
             environment="Dev",
-            fabric_endpoint="https://dev-fabric.unhcr.org",
+            fabric_endpoint="https://dev-fabric.my-org.org",
             azure_key_vault="dev-kv-unhcr",
             azure_function_app="dev-mcp-donor",
             logging_level="DEBUG",
@@ -65,7 +65,7 @@ CONFIG = Configuration(
         "Test": EnvironmentConfig(
             domain="DonorManagement",
             environment="Test",
-            fabric_endpoint="https://test-fabric.unhcr.org",
+            fabric_endpoint="https://test-fabric.my-org.org",
             azure_key_vault="test-kv-unhcr",
             azure_function_app="test-mcp-donor",
             logging_level="INFO",
@@ -74,7 +74,7 @@ CONFIG = Configuration(
         "Production": EnvironmentConfig(
             domain="DonorManagement",
             environment="Production",
-            fabric_endpoint="https://fabric.unhcr.org",
+            fabric_endpoint="https://fabric.my-org.org",
             azure_key_vault="prod-kv-unhcr",
             azure_function_app="mcp-donor",
             logging_level="WARNING",
@@ -99,7 +99,7 @@ AZURE_CLIENT_ID=your-client-id
 AZURE_KEY_VAULT=your-key-vault-name
 
 # Fabric Configuration
-FABRIC_ENDPOINT=https://dev-fabric.unhcr.org
+FABRIC_ENDPOINT=https://dev-fabric.my-org.org
 
 # Logging Configuration
 LOGGING_LEVEL=DEBUG
@@ -123,7 +123,7 @@ configuration:
       environment: Dev
       
       fabric:
-        endpoint: "https://dev-fabric.unhcr.org"
+        endpoint: "https://dev-fabric.my-org.org"
         semantic_models:
           - DonorManagement
           - Finance
@@ -147,7 +147,7 @@ configuration:
       environment: Test
       
       fabric:
-        endpoint: "https://test-fabric.unhcr.org"
+        endpoint: "https://test-fabric.my-org.org"
         semantic_models:
           - DonorManagement
           - Finance
@@ -171,7 +171,7 @@ configuration:
       environment: Production
       
       fabric:
-        endpoint: "https://fabric.unhcr.org"
+        endpoint: "https://fabric.my-org.org"
         semantic_models:
           - DonorManagement
           - Finance
@@ -314,17 +314,17 @@ config = Configuration(
         "Dev": EnvironmentConfig(
             domain="DonorManagement",
             environment="Dev",
-            fabric_endpoint="https://dev-fabric.unhcr.org"
+            fabric_endpoint="https://dev-fabric.my-org.org"
         ),
         "Test": EnvironmentConfig(
             domain="DonorManagement",
             environment="Test",
-            fabric_endpoint="https://test-fabric.unhcr.org"
+            fabric_endpoint="https://test-fabric.my-org.org"
         ),
         "Production": EnvironmentConfig(
             domain="DonorManagement",
             environment="Production",
-            fabric_endpoint="https://fabric.unhcr.org"
+            fabric_endpoint="https://fabric.my-org.org"
         )
     }
 )
@@ -367,7 +367,7 @@ env_config = EnvironmentConfig(
     
     # Fabric configuration
     fabric=FabricConfig(
-        endpoint="https://dev-fabric.unhcr.org",
+        endpoint="https://dev-fabric.my-org.org",
         semantic_models=["DonorManagement", "Finance"]
     ),
     
@@ -517,7 +517,7 @@ errors = validator.validate_with_schema(config, schema)
   "domain": "DonorManagement",
   "environment": "Dev",
   "fabric": {
-    "endpoint": "https://dev-fabric.unhcr.org",
+    "endpoint": "https://dev-fabric.my-org.org",
     "semantic_models": ["DonorManagement", "Finance"],
     "warehouses": ["GoldLayer", "SilverLayer"],
     "lakehouses": ["Gold"],
@@ -545,7 +545,7 @@ errors = validator.validate_with_schema(config, schema)
   },
   "security": {
     "require_https": true,
-    "cors_origins": ["https://unhcr.org", "https://mcp.unhcr.org"],
+    "cors_origins": ["https://my-org.org", "https://mcp.my-org.org"],
     "rate_limiting": {
       "enabled": true,
       "requests_per_minute": 1000
@@ -562,7 +562,7 @@ domain: DonorManagement
 environment: Dev
 
 fabric:
-  endpoint: "https://dev-fabric.unhcr.org"
+  endpoint: "https://dev-fabric.my-org.org"
   semantic_models:
     - DonorManagement
     - Finance
@@ -595,7 +595,7 @@ domain: DonorManagement
 environment: Production
 
 fabric:
-  endpoint: "https://fabric.unhcr.org"
+  endpoint: "https://fabric.my-org.org"
   semantic_models:
     - DonorManagement
     - Finance
@@ -676,15 +676,15 @@ Always use separate configurations for each environment.
 config = Configuration(
     environments={
         "Dev": EnvironmentConfig(
-            fabric_endpoint="https://dev-fabric.unhcr.org",
+            fabric_endpoint="https://dev-fabric.my-org.org",
             logging_level="DEBUG"
         ),
         "Test": EnvironmentConfig(
-            fabric_endpoint="https://test-fabric.unhcr.org",
+            fabric_endpoint="https://test-fabric.my-org.org",
             logging_level="INFO"
         ),
         "Production": EnvironmentConfig(
-            fabric_endpoint="https://fabric.unhcr.org",
+            fabric_endpoint="https://fabric.my-org.org",
             logging_level="WARNING"
         )
     }
@@ -694,11 +694,11 @@ config = Configuration(
 config = Configuration(
     environments={
         "Dev": EnvironmentConfig(
-            fabric_endpoint="https://fabric.unhcr.org",  # Same for all
+            fabric_endpoint="https://fabric.my-org.org",  # Same for all
             logging_level="DEBUG"
         ),
         "Production": EnvironmentConfig(
-            fabric_endpoint="https://fabric.unhcr.org",  # Same as Dev
+            fabric_endpoint="https://fabric.my-org.org",  # Same as Dev
             logging_level="DEBUG"  # Should be WARNING
         )
     }
@@ -976,7 +976,7 @@ config = Configuration(
             domain="DonorManagement",
             environment="Dev",
             fabric=FabricConfig(
-                endpoint="https://dev-fabric.unhcr.org",
+                endpoint="https://dev-fabric.my-org.org",
                 semantic_models=["DonorManagement", "Finance"],
                 timeout=60,
                 max_retries=3
@@ -1001,7 +1001,7 @@ config = Configuration(
             domain="DonorManagement",
             environment="Production",
             fabric=FabricConfig(
-                endpoint="https://fabric.unhcr.org",
+                endpoint="https://fabric.my-org.org",
                 semantic_models=["DonorManagement", "Finance"],
                 timeout=300,
                 max_retries=5

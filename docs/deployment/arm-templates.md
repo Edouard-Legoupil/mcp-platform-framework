@@ -108,7 +108,7 @@ az deployment group create \
     },
     "catalogEndpoint": {
       "type": "string",
-      "defaultValue": "https://catalog.unhcr.org/api/v1",
+      "defaultValue": "https://catalog.my-org.org/api/v1",
       "metadata": {
         "description": "Enterprise catalog API endpoint"
       }
@@ -332,7 +332,7 @@ param environment string = 'dev'
 param location string = resourceGroup().location
 param domain string
 param owner string = 'DER'
-param catalogEndpoint string = 'https://catalog.unhcr.org/api/v1'
+param catalogEndpoint string = 'https://catalog.my-org.org/api/v1'
 param fabricWorkspace string = 'PROD'
 param enablePrivateEndpoints bool = false
 param enableMonitoring bool = true
@@ -519,7 +519,7 @@ output functionAppEndpoint string = 'https://${functionAppName}.azurewebsites.ne
       "value": "DER"
     },
     "catalogEndpoint": {
-      "value": "https://catalog-dev.unhcr.org/api/v1"
+      "value": "https://catalog-dev.my-org.org/api/v1"
     },
     "fabricWorkspace": {
       "value": "DEV"
@@ -554,7 +554,7 @@ output functionAppEndpoint string = 'https://${functionAppName}.azurewebsites.ne
       "value": "DER"
     },
     "catalogEndpoint": {
-      "value": "https://catalog.unhcr.org/api/v1"
+      "value": "https://catalog.my-org.org/api/v1"
     },
     "fabricWorkspace": {
       "value": "PROD"

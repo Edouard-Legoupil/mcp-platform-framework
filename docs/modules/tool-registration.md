@@ -685,7 +685,7 @@ def get_donor_data(donor_id: str):
         {
             "id": "DON-12345",
             "name": "John Doe",
-            "email": "john@unhcr.org",
+            "email": "john@my-org.org",
             ...
         }
     """

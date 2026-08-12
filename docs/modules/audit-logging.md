@@ -57,7 +57,7 @@ AUDIT_CONFIG = AuditConfig(
     
     # SIEM integration
     siem_enabled=True,
-    siem_endpoint="https://siem.unhcr.org/api/audit",
+    siem_endpoint="https://siem.my-org.org/api/audit",
     
     # Sensitive operations
     sensitive_operations=[
@@ -86,7 +86,7 @@ AUDIT_RETENTION_DAYS=3650
 
 # SIEM Integration
 AUDIT_SIEM_ENABLED=true
-AUDIT_SIEM_ENDPOINT=https://siem.unhcr.org/api/audit
+AUDIT_SIEM_ENDPOINT=https://siem.my-org.org/api/audit
 AUDIT_SIEM_CREDENTIALS=your-credentials
 ```
 
@@ -197,7 +197,7 @@ event = AuditEvent(
     action="read",
     resource="donor:DON-12345",
     tool="GetDonorData",
-    user="john.doe@unhcr.org",
+    user="john.doe@my-org.org",
     result="Success",
     classification="CONFIDENTIAL"
 )
@@ -216,7 +216,7 @@ Logs a data access event.
 from platform.audit import log_data_access
 
 log_data_access(
-    user="john.doe@unhcr.org",
+    user="john.doe@my-org.org",
     resource="donor:DON-12345",
     action="read",
     classification="CONFIDENTIAL"
@@ -239,7 +239,7 @@ Logs a data modification event.
 from platform.audit import log_data_modification
 
 log_data_modification(
-    user="john.doe@unhcr.org",
+    user="john.doe@my-org.org",
     resource="donor:DON-12345",
     action="update",
     classification="CONFIDENTIAL",
@@ -266,7 +266,7 @@ from platform.audit import AuditEvent
 
 event = AuditEvent(
     audit_id="aud-20260501-103000-001",
-    user="john.doe@unhcr.org",
+    user="john.doe@my-org.org",
     tool="GetTopDonorContributions",
     time=datetime.utcnow(),
     parameters={"year": 2026, "limit": 10},
@@ -326,7 +326,7 @@ event = await store.get(audit_id)
 
 # Search audit events
 events = await store.search(
-    user="john.doe@unhcr.org",
+    user="john.doe@my-org.org",
     start_time=datetime(2026, 5, 1),
     end_time=datetime(2026, 5, 2)
 )
@@ -356,7 +356,7 @@ from platform.audit import AuditLogger
 logger = AuditLogger(
     store=audit_store,
     siem_enabled=True,
-    siem_endpoint="https://siem.unhcr.org/api/audit"
+    siem_endpoint="https://siem.my-org.org/api/audit"
 )
 
 # Log an event
@@ -364,7 +364,7 @@ logger.log(event)
 
 # Log data access
 logger.log_data_access(
-    user="john.doe@unhcr.org",
+    user="john.doe@my-org.org",
     resource="donor:DON-12345",
     action="read",
     classification="CONFIDENTIAL"
@@ -372,7 +372,7 @@ logger.log_data_access(
 
 # Log authorization failure
 logger.log_authorization_failure(
-    user="john.doe@unhcr.org",
+    user="john.doe@my-org.org",
     permission="finance.confidential",
     resource="finance:REP-2026-001"
 )
@@ -399,7 +399,7 @@ logger.log_authorization_failure(
 ```json
 {
   "audit_id": "aud-20260501-103000-001",
-  "user": "john.doe@unhcr.org",
+  "user": "john.doe@my-org.org",
   "tool": "GetTopDonorContributions",
   "time": "2026-05-01T10:30:00Z",
   "parameters": {
@@ -422,7 +422,7 @@ logger.log_authorization_failure(
 ```json
 {
   "audit_id": "aud-20260501-103001-002",
-  "user": "john.doe@unhcr.org",
+  "user": "john.doe@my-org.org",
   "tool": "DeleteDonor",
   "time": "2026-05-01T10:30:01Z",
   "parameters": {
@@ -462,12 +462,12 @@ reporter = ComplianceReporter(audit_store)
 report = await reporter.generate_report(
     start_time=datetime(2026, 5, 1),
     end_time=datetime(2026, 5, 31),
-    user="john.doe@unhcr.org"
+    user="john.doe@my-org.org"
 )
 
 # Get access patterns
 patterns = await reporter.get_access_patterns(
-    user="john.doe@unhcr.org",
+    user="john.doe@my-org.org",
     days=30
 )
 
@@ -511,7 +511,7 @@ Include all relevant context in audit records.
 ```python
 # Good - Comprehensive context
 log_data_access(
-    user="john.doe@unhcr.org",
+    user="john.doe@my-org.org",
     resource="donor:DON-12345",
     action="read",
     classification="CONFIDENTIAL",
@@ -522,7 +522,7 @@ log_data_access(
 
 # Bad - Missing context
 log_data_access(
-    user="john.doe@unhcr.org",
+    user="john.doe@my-org.org",
     resource="donor:DON-12345"
 )
 ```
@@ -569,7 +569,7 @@ Integrate audit logging with your SIEM system.
 logger = AuditLogger(
     store=audit_store,
     siem_enabled=True,
-    siem_endpoint="https://siem.unhcr.org/api/audit"
+    siem_endpoint="https://siem.my-org.org/api/audit"
 )
 
 # Bad - No SIEM integration
@@ -666,7 +666,7 @@ from platform.audit import AuditLogger
 logger = AuditLogger(
     store=audit_store,
     siem_enabled=True,
-    siem_endpoint="https://siem.unhcr.org/api/audit"
+    siem_endpoint="https://siem.my-org.org/api/audit"
 )
 
 # Test SIEM logging

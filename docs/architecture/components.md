@@ -235,7 +235,7 @@ Provides automatic, comprehensive telemetry collection for all MCP tool calls.
   "duration_ms": 450,
   "status": "Success",
   "requester": {
-    "identity": "john.doe@unhcr.org",
+    "identity": "john.doe@my-org.org",
     "roles": ["donor_analyst"],
     "permissions": ["donor.read", "donor.analytics"]
   },
@@ -310,7 +310,7 @@ Provides immutable audit logging for sensitive operations and compliance monitor
 ```json
 {
   "audit_id": "aud-20260501-103000-001",
-  "user": "john.doe@unhcr.org",
+  "user": "john.doe@my-org.org",
   "tool": "GetTopDonorContributions",
   "time": "2026-05-01T10:30:00Z",
   "parameters": {
@@ -677,7 +677,7 @@ domain: DonorManagement
 environment: Dev
 
 fabric:
-  endpoint: "https://dev-fabric.unhcr.org"
+  endpoint: "https://dev-fabric.my-org.org"
   semantic_models:
     - DonorManagement
     - Finance
@@ -695,7 +695,7 @@ domain: DonorManagement
 environment: Production
 
 fabric:
-  endpoint: "https://fabric.unhcr.org"
+  endpoint: "https://fabric.my-org.org"
   semantic_models:
     - DonorManagement
     - Finance

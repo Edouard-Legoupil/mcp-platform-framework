@@ -324,8 +324,8 @@ security:
   require_https: true
   cors:
     allowed_origins:
-      - "https://unhcr.org"
-      - "https://portal.unhcr.org"
+      - "https://my-org.org"
+      - "https://portal.my-org.org"
     allowed_methods:
       - "GET"
       - "POST"

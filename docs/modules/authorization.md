@@ -595,7 +595,7 @@ audit_logger = AuthorizationAuditLogger()
 
 # Log authorization success
 await audit_logger.log_success(
-    caller="john.doe@unhcr.org",
+    caller="john.doe@my-org.org",
     permission="donor.read",
     resource="donor:DON-12345",
     action="read"
@@ -603,7 +603,7 @@ await audit_logger.log_success(
 
 # Log authorization failure
 await audit_logger.log_failure(
-    caller="john.doe@unhcr.org",
+    caller="john.doe@my-org.org",
     permission="donor.admin",
     resource="donor:DON-12345",
     action="delete",

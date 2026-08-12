@@ -56,7 +56,7 @@ from platform.fabric.config import FabricConfig
 
 FABRIC_CONFIG = FabricConfig(
     # Fabric endpoint
-    endpoint="https://fabric.unhcr.org",
+    endpoint="https://fabric.my-org.org",
     
     # Authentication
     authentication_type="managed_identity",  # or "service_principal", "entra_id"
@@ -121,7 +121,7 @@ FABRIC_CONFIG = FabricConfig(
 
 ```bash
 # Fabric Configuration
-FABRIC_ENDPOINT=https://fabric.unhcr.org
+FABRIC_ENDPOINT=https://fabric.my-org.org
 FABRIC_AUTHENTICATION_TYPE=managed_identity
 
 # Semantic Models
@@ -577,7 +577,7 @@ from platform.fabric import FabricClient
 
 # Create Fabric client
 client = FabricClient(
-    endpoint="https://fabric.unhcr.org",
+    endpoint="https://fabric.my-org.org",
     authentication_type="managed_identity"
 )
 

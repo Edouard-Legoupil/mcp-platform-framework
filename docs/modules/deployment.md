@@ -1068,7 +1068,7 @@ Use approval gates for production deployments.
       steps:
         - task: ManualValidation@0
           inputs:
-            notifyUsers: "team@unhcr.org"
+            notifyUsers: "team@my-org.org"
             instructions: "Please review and approve production deployment"
             onTimeout: "reject"
     
@@ -1463,7 +1463,7 @@ stages:
         steps:
           - task: ManualValidation@0
             inputs:
-              notifyUsers: "team@unhcr.org"
+              notifyUsers: "team@my-org.org"
               instructions: "Please review and approve production deployment"
               onTimeout: "reject"
             displayName: 'Approve production deployment'

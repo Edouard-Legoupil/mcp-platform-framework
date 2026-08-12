@@ -82,7 +82,7 @@ ERROR_CONFIG = ErrorConfig(
     
     # Error reporting
     report_errors=True,
-    error_reporting_endpoint="https://errors.unhcr.org/api/report"
+    error_reporting_endpoint="https://errors.my-org.org/api/report"
 )
 ```
 
@@ -94,7 +94,7 @@ ERROR_CONFIG = ErrorConfig(
 # Error Configuration
 ERROR_DOMAIN_PREFIXES=donor:DONOR,finance:FINANCE,supply:SUPPLY
 ERROR_REPORTING_ENABLED=true
-ERROR_REPORTING_ENDPOINT=https://errors.unhcr.org/api/report
+ERROR_REPORTING_ENDPOINT=https://errors.my-org.org/api/report
 
 # Error Logging
 ERROR_LOG_LEVEL=ERROR
@@ -333,7 +333,7 @@ from platform.errors import ErrorReporter
 
 # Create error reporter
 reporter = ErrorReporter(
-    endpoint="https://errors.unhcr.org/api/report",
+    endpoint="https://errors.my-org.org/api/report",
     api_key="your-api-key",
     batch_enabled=True,
     batch_size=100
@@ -347,7 +347,7 @@ reporter.report(
         message="Access denied"
     ),
     context={
-        "user": "john.doe@unhcr.org",
+        "user": "john.doe@my-org.org",
         "tool": "GetDonorData",
         "environment": "Production"
     }
@@ -381,7 +381,7 @@ reporter.flush()
   "message": "Access denied to donor data",
   "details": {
     "required_permission": "donor.read",
-    "user": "john.doe@unhcr.org",
+    "user": "john.doe@my-org.org",
     "resource": "donor:DON-12345"
   },
   "timestamp": "2026-05-01T10:30:00Z",
@@ -511,7 +511,7 @@ raise MCPError(
     message="Access denied to donor data",
     details={
         "required_permission": "donor.read",
-        "user": "john.doe@unhcr.org",
+        "user": "john.doe@my-org.org",
         "resource": "donor:DON-12345"
     }
 )
@@ -574,7 +574,7 @@ response = handler.handle_exception(
     exception=ValueError("Invalid donor ID"),
     request_id="req-001",
     correlation_id="corr-001",
-    user="john.doe@unhcr.org",
+    user="john.doe@my-org.org",
     tool="GetDonorData"
 )
 
@@ -684,7 +684,7 @@ raise MCPError(
     message="Access denied",
     details={
         "required_permission": "donor.read",
-        "user": "john.doe@unhcr.org",
+        "user": "john.doe@my-org.org",
         "resource": "donor:DON-12345"
     },
     include_stack_trace=True
@@ -712,7 +712,7 @@ raise MCPError(
 from platform.errors import ErrorReporter
 
 reporter = ErrorReporter(
-    endpoint="https://errors.unhcr.org/api/report",
+    endpoint="https://errors.my-org.org/api/report",
     api_key="your-api-key"
 )
 

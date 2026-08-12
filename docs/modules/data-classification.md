@@ -364,17 +364,17 @@ service = ClassificationService()
 
 # Check if user can access classification
 can_access = service.can_access(
-    user="john.doe@unhcr.org",
+    user="john.doe@my-org.org",
     required_level=ClassificationLevel.CONFIDENTIAL
 )
 
 # Get user's maximum classification
-max_level = service.get_user_classification("john.doe@unhcr.org")
+max_level = service.get_user_classification("john.doe@my-org.org")
 
 # Check if tool requires justification
 requires_justification = service.requires_justification(
     tool="GetFinancialReports",
-    user="john.doe@unhcr.org"
+    user="john.doe@my-org.org"
 )
 ```
 
@@ -455,7 +455,7 @@ def get_confidential_data():
 
 # Check classification before access
 can_access = enforcer.check_access(
-    user="john.doe@unhcr.org",
+    user="john.doe@my-org.org",
     resource="finance:report:2026",
     action="read"
 )
@@ -478,7 +478,7 @@ masked_data = masker.mask(
 
 # Mask with custom rules
 masked_data = masker.mask_with_rules(
-    data={"ssn": "123-45-6789", "email": "john@unhcr.org"},
+    data={"ssn": "123-45-6789", "email": "john@my-org.org"},
     rules={
         "ssn": "***SSN***",
         "email": "***EMAIL***"
@@ -686,7 +686,7 @@ from platform.classification import ClassificationService
 service = ClassificationService()
 
 # Get user's classification
-user_level = service.get_user_classification("john.doe@unhcr.org")
+user_level = service.get_user_classification("john.doe@my-org.org")
 print(f"User classification: {user_level}")
 
 # Get tool's classification
@@ -694,7 +694,7 @@ tool_level = service.get_tool_classification("GetFinancialReports")
 print(f"Tool classification: {tool_level}")
 
 # Check access
-can_access = service.can_access("john.doe@unhcr.org", tool_level)
+can_access = service.can_access("john.doe@my-org.org", tool_level)
 print(f"Can access: {can_access}")
 ```
 

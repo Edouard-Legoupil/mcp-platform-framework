@@ -102,7 +102,7 @@ param domain string
 param owner string = 'DER'
 @description('Domain owner team code')
 
-param catalogEndpoint string = 'https://catalog.unhcr.org/api/v1'
+param catalogEndpoint string = 'https://catalog.my-org.org/api/v1'
 @description('Enterprise catalog API endpoint')
 
 param fabricWorkspace string = 'PROD'
@@ -422,8 +422,8 @@ resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
       // CORS settings
       cors: {
         allowedOrigins: [
-          'https://unhcr.org'
-          'https://portal.unhcr.org'
+          'https://my-org.org'
+          'https://portal.my-org.org'
           'https://localhost:3000'
           'https://localhost:8080'
         ]
@@ -840,7 +840,7 @@ resource actionGroup 'Microsoft.Insights/actionGroups@2022-01-01' = if (enableMo
     emailReceivers: [
       {
         name: 'MCPAdmins'
-        emailAddress: 'mcp-alerts@unhcr.org'
+        emailAddress: 'mcp-alerts@my-org.org'
         useCommonAlertSchema: true
       }
     ]
@@ -1091,8 +1091,8 @@ resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
       
       cors: {
         allowedOrigins: [
-          'https://unhcr.org'
-          'https://portal.unhcr.org'
+          'https://my-org.org'
+          'https://portal.my-org.org'
           'https://localhost:3000'
           'https://localhost:8080'
         ]
@@ -1376,7 +1376,7 @@ param environment = 'dev'
 param location = 'eastus'
 param domain = 'DonorManagement'
 param owner = 'DER'
-param catalogEndpoint = 'https://catalog-dev.unhcr.org/api/v1'
+param catalogEndpoint = 'https://catalog-dev.my-org.org/api/v1'
 param fabricWorkspace = 'DEV'
 param enablePrivateEndpoints = false
 param enableMonitoring = true
@@ -1394,7 +1394,7 @@ param environment = 'prod'
 param location = 'eastus'
 param domain = 'DonorManagement'
 param owner = 'DER'
-param catalogEndpoint = 'https://catalog.unhcr.org/api/v1'
+param catalogEndpoint = 'https://catalog.my-org.org/api/v1'
 param fabricWorkspace = 'PROD'
 param enablePrivateEndpoints = true
 param enableMonitoring = true

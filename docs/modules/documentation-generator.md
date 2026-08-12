@@ -220,7 +220,7 @@ documentation:
   publishing:
     static_site:
       enabled: true
-      url: "https://docs.unhcr.org/mcp"
+      url: "https://docs.my-org.org/mcp"
       branch: "main"
       
     azure_static_web_app:
@@ -237,7 +237,7 @@ documentation:
     git:
       enabled: true
       commit_message: "Update generated documentation"
-      author: "Documentation Bot <docs@unhcr.org>"
+      author: "Documentation Bot <docs@my-org.org>"
 ```
 
 ### Template Configuration

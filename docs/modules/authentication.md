@@ -111,7 +111,7 @@ authentication:
     audience: ${AUTH_AUDIENCE}
     issuer: ${AUTH_ISSUER}
     allowed_tenants:
-      - "unhcr.org"
+      - "my-org.org"
     
   token:
     access_lifetime: 3600
@@ -125,8 +125,8 @@ authentication:
   security:
     require_https: true
     cors_origins:
-      - "https://unhcr.org"
-      - "https://mcp.unhcr.org"
+      - "https://my-org.org"
+      - "https://mcp.my-org.org"
     rate_limiting:
       enabled: true
       requests_per_minute: 1000
@@ -228,7 +228,7 @@ Gets an access token using Managed Identity.
 from platform.auth import get_managed_identity_token
 
 # Get token for Fabric
-token = await get_managed_identity_token("https://fabric.unhcr.org")
+token = await get_managed_identity_token("https://fabric.my-org.org")
 
 # Get token for Key Vault
 token = await get_managed_identity_token("https://vault.azure.net")
@@ -255,9 +255,9 @@ from platform.auth import CallerIdentity
 
 # Create a caller identity
 caller = CallerIdentity(
-    identity="john.doe@unhcr.org",
+    identity="john.doe@my-org.org",
     name="John Doe",
-    email="john.doe@unhcr.org",
+    email="john.doe@my-org.org",
     roles=["donor_analyst"],
     permissions=["donor.read", "donor.analytics"],
     authentication_method=["mfa"]
@@ -400,7 +400,7 @@ from platform.auth.managed_identity import SystemAssignedIdentity
 
 # Get access token
 identity = SystemAssignedIdentity()
-token = await identity.get_access_token("https://fabric.unhcr.org")
+token = await identity.get_access_token("https://fabric.my-org.org")
 ```
 
 ### User-Assigned Identity
@@ -410,7 +410,7 @@ from platform.auth.managed_identity import UserAssignedIdentity
 
 # Get access token
 identity = UserAssignedIdentity(client_id="your-user-assigned-identity-id")
-token = await identity.get_access_token("https://fabric.unhcr.org")
+token = await identity.get_access_token("https://fabric.my-org.org")
 ```
 
 ### DefaultAzureCredential Integration
@@ -420,7 +420,7 @@ from platform.auth.managed_identity import DefaultAzureCredentialIdentity
 
 # Use DefaultAzureCredential (tries multiple identity sources)
 identity = DefaultAzureCredentialIdentity()
-token = await identity.get_access_token("https://fabric.unhcr.org")
+token = await identity.get_access_token("https://fabric.my-org.org")
 ```
 
 ## 🔒 Security Features
@@ -481,7 +481,7 @@ is_allowed = await limiter.is_allowed(ip_address="192.168.1.100")
 # Check with user identification
 is_allowed = await limiter.is_allowed(
     ip_address="192.168.1.100",
-    user_id="john.doe@unhcr.org"
+    user_id="john.doe@my-org.org"
 )
 ```
 
@@ -515,7 +515,7 @@ audit_logger = AuthenticationAuditLogger()
 
 # Log authentication success
 await audit_logger.log_success(
-    user="john.doe@unhcr.org",
+    user="john.doe@my-org.org",
     authentication_method="EntraID",
     ip_address="192.168.1.100",
     user_agent="Mozilla/5.0..."
@@ -523,7 +523,7 @@ await audit_logger.log_success(
 
 # Log authentication failure
 await audit_logger.log_failure(
-    user="john.doe@unhcr.org",
+    user="john.doe@my-org.org",
     failure_reason="Invalid token",
     error_code="AUTH-001",
     ip_address="192.168.1.100",
@@ -557,7 +557,7 @@ Use Managed Identity instead of service principals with secrets.
 
 ```python
 # Good
-token = await get_managed_identity_token("https://fabric.unhcr.org")
+token = await get_managed_identity_token("https://fabric.my-org.org")
 
 # Bad - Using service principal with secret
 token = await get_token_with_secret("client-id", "client-secret")
@@ -671,7 +671,7 @@ except AuthenticationError as e:
 ```python
 # Debug Managed Identity
 try:
-    token = await get_managed_identity_token("https://fabric.unhcr.org")
+    token = await get_managed_identity_token("https://fabric.my-org.org")
     print(f"Token acquired: {token[:20]}...")
 except ManagedIdentityError as e:
     print(f"Managed Identity error: {e}")
@@ -727,7 +727,7 @@ def get_donor_portfolio(donor_id: str):
         )
     
     # Get data from Fabric using Managed Identity
-    token = await get_managed_identity_token("https://fabric.unhcr.org")
+    token = await get_managed_identity_token("https://fabric.my-org.org")
     fabric_client = FabricClient(token)
     
     # Get donor data
@@ -752,9 +752,9 @@ from platform.auth.entra_id import MultiTenantConfig
 
 # Configure multi-tenant support
 config = MultiTenantConfig(
-    allowed_tenants=["unhcr.org", "partner.org"],
+    allowed_tenants=["my-org.org", "partner.org"],
     tenant_mapping={
-        "unhcr.org": {"roles": ["donor_analyst", "donor_manager"]},
+        "my-org.org": {"roles": ["donor_analyst", "donor_manager"]},
         "partner.org": {"roles": ["partner_user"]}
     }
 )
@@ -767,7 +767,7 @@ def cross_tenant_tool():
     tenant_config = config.get_tenant_config(caller.tenant_id)
     
     # Apply tenant-specific logic
-    if caller.tenant_id == "unhcr.org":
+    if caller.tenant_id == "my-org.org":
         # UNHCR-specific logic
         pass
     elif caller.tenant_id == "partner.org":

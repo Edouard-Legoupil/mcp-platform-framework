@@ -123,7 +123,7 @@ print(f"Tool registered with ID: {registration.tool_id}")
 
 ```yaml
 catalog:
-  endpoint: "https://catalog.unhcr.org/api/v1"
+  endpoint: "https://catalog.my-org.org/api/v1"
   api_key: "${CATALOG_API_KEY}"
   timeout: 30
   retry:
@@ -522,7 +522,7 @@ All catalog operations are logged:
 {
   "timestamp": "2026-05-01T10:00:00Z",
   "operation": "register_tool",
-  "user": "service-principal@unhcr.org",
+  "user": "service-principal@my-org.org",
   "tool_id": "tool-123",
   "tool_name": "GetDonorPortfolioHealth",
   "status": "success",
@@ -622,8 +622,8 @@ from platform.telemetry import instrumented
             enum=["7d", "30d", "90d", "1y"]
         )
     ],
-    documentation_url="https://docs.unhcr.org/mcp/donor-management#portfolio-health",
-    support_contact="der-support@unhcr.org"
+    documentation_url="https://docs.my-org.org/mcp/donor-management#portfolio-health",
+    support_contact="der-support@my-org.org"
 )
 def get_donor_portfolio_health(donor_id: str, time_range: str = "30d") -> dict:
     """
@@ -719,7 +719,7 @@ def find_confidential_donor_tools():
 
 ## 📚 Additional Resources
 
-- [Enterprise Catalog API Documentation](https://catalog.unhcr.org/api/docs)
+- [Enterprise Catalog API Documentation](https://catalog.my-org.org/api/docs)
 - [Azure Purview Documentation](https://learn.microsoft.com/en-us/azure/purview/)
 - [Azure Resource Graph Documentation](https://learn.microsoft.com/en-us/azure/governance/resource-graph/)
 - [MCP Framework Architecture](../architecture/components.md)

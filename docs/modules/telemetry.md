@@ -58,7 +58,7 @@ TELEMETRY_CONFIG = TelemetryConfig(
     
     # Custom endpoints
     custom_endpoints=[
-        "https://telemetry.unhcr.org/api/metrics"
+        "https://telemetry.my-org.org/api/metrics"
     ],
     
     # Sampling
@@ -107,7 +107,7 @@ telemetry:
     workspace_key: ${LOG_ANALYTICS_WORKSPACE_KEY}
     
   custom_endpoints:
-    - "https://telemetry.unhcr.org/api/metrics"
+    - "https://telemetry.my-org.org/api/metrics"
     
   sampling:
     rate: 1.0
@@ -197,7 +197,7 @@ track_tool_call(
     duration=450,
     status="Success",
     domain="DonorManagement",
-    requester="john.doe@unhcr.org"
+    requester="john.doe@my-org.org"
 )
 ```
 
@@ -282,7 +282,7 @@ telemetry = TelemetryData(
     domain="DonorManagement",
     duration_ms=450,
     status="Success",
-    requester_identity="john.doe@unhcr.org",
+    requester_identity="john.doe@my-org.org",
     requester_roles=["donor_analyst"],
     requester_permissions=["donor.read", "donor.analytics"],
     environment="Production",
@@ -377,7 +377,7 @@ client.flush()
   "duration_ms": 450,
   "status": "Success",
   "requester": {
-    "identity": "john.doe@unhcr.org",
+    "identity": "john.doe@my-org.org",
     "roles": ["donor_analyst"],
     "permissions": ["donor.read", "donor.analytics"]
   },
@@ -402,7 +402,7 @@ client.flush()
   "duration_ms": 50,
   "status": "Error",
   "requester": {
-    "identity": "john.doe@unhcr.org",
+    "identity": "john.doe@my-org.org",
     "roles": ["donor_analyst"]
   },
   "environment": "Production",
@@ -749,7 +749,7 @@ from platform.telemetry import TelemetryClient
 # Create client with custom endpoint
 client = TelemetryClient(
     app_insights_enabled=False,
-    custom_endpoints=["https://telemetry.unhcr.org/api/metrics"]
+    custom_endpoints=["https://telemetry.my-org.org/api/metrics"]
 )
 
 # Track to custom endpoint
