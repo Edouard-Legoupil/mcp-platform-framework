@@ -72,7 +72,7 @@ The MCP Platform Framework provides a comprehensive infrastructure layer for imp
 
 ```bash
 # Clone the platform framework
-git clone https://github.com/your-org/mcp-platform-framework.git
+git clone https://github.com/Edouard-Legoupil/mcp-platform-framework.git
 cd mcp-platform-framework
 
 # Install dependencies
