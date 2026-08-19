@@ -1,198 +1,291 @@
-# 📚 MCP Platform Framework Documentation
+# 📚 MCP Framework Documentation
 
-**Welcome to the MCP Platform Framework Documentation!**
+**Welcome to the MCP Framework Documentation Hub**
 
-The MCP (Model Context Protocol) Platform Framework provides a comprehensive infrastructure layer for building domain-specific MCP services on Microsoft Azure. This framework enforces strict separation between platform concerns and domain business capabilities, ensuring consistency, security, and maintainability across all MCP implementations.
-
-## 🎯 Quick Start
-
-### For Domain Developers
-If you're building a new domain (like DonorManagement, Finance, etc.), start here:
-
-```bash
-# 1. Create a new domain from template
-python -m platform.template.template_generator --domain MyDomain --output ./my-domain
-
-# 2. Navigate to your domain
-cd my-domain
-
-# 3. Install dependencies
-pip install -r requirements.txt
-
-# 4. Develop your tools
-# Edit files in the tools/ directory
-
-# 5. Test locally
-python main.py
-```
-
-### For Platform Administrators
-If you're deploying and managing the MCP Platform:
-
-```bash
-# 1. Deploy infrastructure using Bicep
-az deployment group create \
-    --resource-group mcp-platform-rg \
-    --template-file deployment/mcp-deployment.bicep \
-    --parameters projectName=mcp-platform environment=prod
-
-# 2. Deploy Function App
-az functionapp deployment source config-zip \
-    --resource-group mcp-platform-rg \
-    --name mcp-platform-prod-func \
-    --src .
-```
-
-## 🏗️ Architecture Overview
-
-The MCP Platform Framework follows a **strict separation of concerns** principle:
-
-```
-┌───────────────────────────────────────────────────────────────────────┐
-│                    MCP Platform Framework                             │
-├───────────────────────────────────────────────────────────────────────┤
-│  🔐 Authentication      │  🛡️ Authorization        │  📊 Telemetry    │
-│  📝 Audit Logging       │  ❌ Error Handling       │  ⚙️  Config      │
-│  🏷️ Classification      │  🔧 Registration         │  🔗 Connectivity │
-└───────────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌───────────────────────────────────────────────────────────────────────┐
-│                    Domain Repositories                                │
-├───────────────────────────────────────────────────────────────────────┤
-│  mcp-donor-management/  │  mcp-finance/           │  mcp-supply/      │
-│  mcp-campaign/          │  mcp-psp/               │  ...              │
-└───────────────────────────────────────────────────────────────────────┘
-```
-
-**Key Principles:**
-- ✅ **Domains own business capabilities** (logic, ontologies, semantic definitions)
-- ✅ **Platform owns everything else** (authentication, authorization, telemetry, etc.)
-- ✅ **No domain forking** - all domains use the same central platform template
-- ✅ **Automatic tool discovery** - tools are automatically registered from decorators
-
-## 📖 Documentation Sections
-
-### [🚀 Getting Started](getting-started/README.md)
-Learn how to install, configure, and start using the MCP Platform Framework.
-
-### [🏗️ Architecture](architecture/README.md)
-Understand the design principles, components, and data flow of the framework.
-
-### [📦 Platform Modules](modules/README.md)
-Detailed documentation for each platform module and its capabilities.
-
-### [🚀 Deployment](deployment/README.md)
-Comprehensive guides for deploying the framework to Azure.
-
-### [💡 Examples](examples/README.md)
-Practical examples showing how to use the framework in real scenarios.
-
-### [🔧 API Reference](api-reference/README.md)
-Complete API documentation for all platform modules.
-
-### [🏭 Domain Templates](templates/README.md)
-Learn how to create new domain repositories using the template system.
-
-### [⭐ Best Practices](best-practices/README.md)
-Recommended patterns and practices for building robust MCP services.
-
-## 🎯 Core Features
-
-### 🔐 Authentication & Authorization
-- **Entra ID Integration**: Full Azure AD authentication with JWT validation
-- **Managed Identity**: System and User Assigned Identity support
-- **RBAC**: Role-Based Access Control with policy enforcement
-- **Decorators**: Easy-to-use decorators for authentication and authorization
-
-### 📊 Observability
-- **Telemetry**: Automatic Application Insights integration
-- **Audit Logging**: Immutable compliance logging to Azure Blob Storage
-- **Tool Tracking**: Automatic capture of tool execution metrics
-
-### 🔗 Microsoft Fabric Integration
-- **Semantic Models**: Standardized access to Power BI semantic models
-- **Warehouses**: SQL query execution against Fabric warehouses
-- **Lakehouses**: Data analysis with SQL and Spark support
-- **Unified Interface**: Single interface for all Fabric services
-
-### ⚙️ Configuration & Management
-- **Environment-Aware**: DEV, TEST, PROD configuration support
-- **Key Vault Integration**: Secure secrets management
-- **Automatic Discovery**: Tools are automatically discovered and registered
-- **Data Classification**: Enforce governance policies through framework controls
-
-## 📁 Project Structure
-
-```
-mcp-platform-framework/
-├── platform/                    # Core platform modules
-│   ├── auth/                  # Authentication & Identity
-│   ├── authorization/        # RBAC & Permissions
-│   ├── telemetry/            # Observability
-│   ├── audit/                # Compliance Logging
-│   ├── errors/               # Error Handling
-│   ├── config/               # Configuration
-│   ├── classification/       # Data Classification
-│   ├── registration/         # Tool Discovery & Registration
-│   ├── connectivity/         # Fabric Integration
-│   ├── template/             # Domain Templates
-│   └── framework.py          # Main Framework Integration
-├── azure_functions/           # Function App Configuration
-├── deployment/                # ARM/Bicep Templates
-├── pipelines/                 # CI/CD Pipelines
-├── docs/                      # Documentation
-├── tests/                     # Unit & Integration Tests
-├── examples/                  # Example Domain Implementations
-├── main.py                    # Function App Entry Point
-└── requirements.txt           # Dependencies
-```
-
-## 🔍 Documentation Search
-
-Looking for something specific? Check out these common topics:
-
-- **[Tool Development](examples/tool-development.md)** - How to create MCP tools
-- **[Semantic Model Access](examples/semantic-models.md)** - Query Power BI semantic models
-- **[Authentication Setup](modules/authentication.md)** - Configure Entra ID and Managed Identity
-- **[Deployment Guide](deployment/overview.md)** - Deploy to Azure Function Apps
-- **[CI/CD Pipelines](deployment/azure-devops.md)** - Set up automated deployment
-
-## 💬 Support & Contributing
-
-### Getting Help
-- **Documentation**: Browse the docs in this directory
-- **Examples**: Check the `examples/` directory for working examples
-- **Issues**: Open an issue for bugs or feature requests
-- **Discussions**: Join the discussion for Q&A
-
-### Contributing
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on:
-- Reporting bugs
-- Suggesting features
-- Submitting pull requests
-- Documentation improvements
-
-### Code of Conduct
-This project follows the [Code of Conduct](CODE_OF_CONDUCT.md). Please read it before participating.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🏷️ Version Information
-
-- **Framework Version**: 1.0.0
-- **Python Version**: 3.11+
-- **Azure Functions Version**: 4.x
-- **Last Updated**: August 2026
+This documentation is organized to serve **two distinct audiences**. Please navigate to the appropriate section for your needs.
 
 ---
 
-**🎉 Ready to get started?**
+## 🎯 **For MCP Server Developers (Users of this Framework)**
 
-- **Domain Developers**: [Quick Start Guide](getting-started/quick-start.md)
-- **Platform Administrators**: [Deployment Guide](deployment/overview.md)
-- **Everyone**: [Architecture Overview](architecture/overview.md)
+If you're **building an MCP server using this framework**, you'll find everything you need in the **root directory documentation**:
 
-**Have questions?** Check the [FAQ](FAQ.md) or open an issue.
+### 📖 **Start Here**
+- **[USER_GUIDE.md](../USER_GUIDE.md)** - **Complete guide for MCP server developers**
+  - Quick start instructions
+  - Tool implementation guides
+  - Resource definition examples
+  - Prompt template creation
+  - Deployment walkthroughs
+  - Testing strategies
+  - Troubleshooting help
+
+- **[TEMPLATE_GUIDE.md](../TEMPLATE_GUIDE.md)** - **Quick start template**
+  - Step-by-step setup
+  - Configuration examples
+  - Deployment scripts
+
+### 🎯 **What You'll Implement**
+As an MCP Server Developer, you focus on:
+- ✅ **Tools** - Your business functions that users can call
+- ✅ **Resources** - Your data sources that users can access
+- ✅ **Prompt Templates** - Your Copilot Studio templates
+- ✅ **Domain Configuration** - Your server-specific settings
+
+### 🏗️ **What the Framework Provides**
+The framework handles all infrastructure concerns:
+- ✅ **Authentication & Authorization** - Entra ID, JWT, RBAC
+- ✅ **Telemetry & Monitoring** - Application Insights, OpenTelemetry
+- ✅ **Error Handling** - Standardized errors, recovery, logging
+- ✅ **Configuration** - Environment variables, Key Vault integration
+- ✅ **Data Connectivity** - Fabric, Warehouse, Lakehouse connectors
+- ✅ **Audit Logging** - Immutable audit trail
+- ✅ **Data Classification** - Governance controls
+- ✅ **MCP Protocol Compliance** - All required endpoints
+
+---
+
+## 🏗️ **For Framework Contributors (Framework Developers)**
+
+If you're **contributing to the MCP Framework itself**, you'll find the internal documentation here:
+
+### 📖 **Start Here**
+- **[FRAMEWORK_DOCUMENTATION.md](../FRAMEWORK_DOCUMENTATION.md)** - **Complete internal framework documentation**
+  - Architecture overview
+  - Design principles
+  - Module documentation
+  - API references
+  - Development guidelines
+  - Contribution rules
+
+### 🏗️ **Framework Documentation Structure**
+
+```
+docs/
+├── architecture/                      # 🏗️ Framework Architecture
+│   ├── overview.md                   # High-level architecture
+│   ├── principles.md                 # Design principles
+│   ├── components.md                 # Component structure
+│   ├── data-flow.md                  # Data flow diagrams
+│   └── security.md                   # Security architecture
+│
+├── modules/                          # 🏗️ Platform Services
+│   ├── framework.md                  # Core framework
+│   ├── authentication.md             # Auth infrastructure
+│   ├── authorization.md              # Authorization services
+│   ├── audit-logging.md              # Audit trail
+│   ├── telemetry.md                  # Monitoring & observability
+│   ├── error-handling.md             # Error management
+│   ├── configuration-management.md   # Configuration system
+│   ├── data-classification.md        # Data governance
+│   ├── catalog-integration.md        # Resource catalog
+│   ├── connectivity/                 # Data connectors
+│   │   ├── fabric-connectivity.md    # Microsoft Fabric
+│   │   ├── warehouse-queries.md      # SQL Warehouse
+│   │   ├── lakehouse-operations.md   # Delta Lake
+│   │   └── semantic-models.md        # Semantic models
+│   └── deployment.md                 # Deployment module
+│
+├── api-reference/                    # 🏗️ Internal APIs
+│   ├── platform.md                   # Platform API
+│   ├── authentication.md             # Auth API
+│   ├── authorization.md              # AuthZ API
+│   ├── telemetry.md                  # Telemetry API
+│   ├── audit.md                      # Audit API
+│   ├── connectivity.md               # Connectivity API
+│   └── decorators.md                 # Framework decorators
+│
+├── best-practices/                   # 🏗️ Development Guidelines
+│   ├── README.md                     # Best practices index
+│   ├── errors.md                     # Error handling patterns
+│   ├── performance.md                # Performance guidelines
+│   ├── security.md                   # Security best practices
+│   └── testing.md                    # Testing guidelines
+│
+├── deployment/                       # 🏗️ Deployment Documentation
+│   ├── README.md                    # Deployment overview
+│   ├── overview.md                   # Deployment architecture
+│   ├── arm-templates.md              # ARM template guides
+│   ├── bicep-templates.md            # Bicep template guides
+│   ├── environments.md               # Environment management
+│   ├── function-app.md               # Function App deployment
+│   ├── pipeline-config.md            # CI/CD pipeline config
+│   ├── azure-devops.md               # Azure DevOps integration
+│   └── github-actions.md             # GitHub Actions integration
+│
+└── examples/                         # 🏗️ Framework Usage Examples
+    ├── README.md                    # Examples index
+    ├── authentication.md            # Auth implementation example
+    ├── authorization.md             # AuthZ implementation example
+    ├── donor-management.md          # Domain implementation example
+    ├── warehouse-queries.md          # Warehouse operations example
+    ├── lakehouse-operations.md      # Lakehouse operations example
+    ├── semantic-models.md            # Semantic models example
+    └── tool-development.md           # Tool development patterns
+```
+
+### 🏗️ **What You'll Work On**
+As a Framework Contributor, you focus on:
+- 🏗️ **Platform Services** - Authentication, authorization, telemetry, etc.
+- 🏗️ **Connectivity Layer** - Data source connectors
+- 🏗️ **Infrastructure** - Deployment, CI/CD, monitoring
+- 🏗️ **Core Framework** - Main framework implementation
+- 🏗️ **Documentation** - Internal docs and examples
+
+---
+
+## 🎯 **Documentation Philosophy**
+
+### For User Documentation (MCP Server Developers)
+
+**Purpose:** Help users **build their own MCP servers** using this framework
+
+**Characteristics:**
+- 🎯 **Action-oriented** - Step-by-step guides, tutorials
+- 🎯 **Example-driven** - Code examples, templates
+- 🎯 **Practical** - Focus on solving user problems
+- 🎯 **Simplified** - Hide framework complexity
+- 🎯 **Prescriptive** - Clear recommendations, best practices
+
+**Location:** Root directory (`USER_GUIDE.md`, `TEMPLATE_GUIDE.md`)
+
+### For Framework Documentation (Framework Contributors)
+
+**Purpose:** Help contributors **understand, maintain, and extend** the framework
+
+**Characteristics:**
+- 🏗️ **Technical** - Deep dives into implementation details
+- 🏗️ **Architectural** - Design decisions, patterns, rationale
+- 🏗️ **Comprehensive** - Complete API references, module docs
+- 🏗️ **Internal** - Framework internals, implementation details
+- 🏗️ **Collaborative** - Contribution guidelines, standards
+
+**Location:** `docs/` directory and `FRAMEWORK_DOCUMENTATION.md`
+
+---
+
+## 🔍 **Documentation Map**
+
+### User Documentation (MCP Server Developers)
+
+| Need | Document | Location |
+|------|----------|----------|
+| Complete guide to building MCP servers | [USER_GUIDE.md](../USER_GUIDE.md) | Root |
+| Quick start template | [TEMPLATE_GUIDE.md](../TEMPLATE_GUIDE.md) | Root |
+| Environment configuration | [.env.example](../.env.example) | Root |
+| Local development setup | [local.settings.json.example](../local.settings.json.example) | Root |
+| Deployment script | [deploy.sh](../deploy/scripts/deploy.sh) | deploy/scripts/ |
+| Production dependencies | [requirements.txt](../src/azure/requirements.txt) | src/azure/ |
+
+### Framework Documentation (Framework Contributors)
+
+| Need | Document | Location |
+|------|----------|----------|
+| Complete framework documentation | [FRAMEWORK_DOCUMENTATION.md](../FRAMEWORK_DOCUMENTATION.md) | Root |
+| Architecture overview | [architecture/overview.md](./architecture/overview.md) | docs/architecture/ |
+| Design principles | [architecture/principles.md](./architecture/principles.md) | docs/architecture/ |
+| Module documentation | [modules/](./modules/) | docs/modules/ |
+| API references | [api-reference/](./api-reference/) | docs/api-reference/ |
+| Best practices | [best-practices/](./best-practices/) | docs/best-practices/ |
+| Deployment guides | [deployment/](./deployment/) | docs/deployment/ |
+| Usage examples | [examples/](./examples/) | docs/examples/ |
+| Contribution guidelines | [CONTRIBUTING.md](./CONTRIBUTING.md) | docs/ |
+
+---
+
+## 📝 **Documentation Standards**
+
+### User Documentation Standards
+
+When creating or updating **user-facing documentation**:
+
+✅ **Do:**
+- Use simple, action-oriented language
+- Provide step-by-step instructions
+- Include working code examples
+- Focus on user goals and outcomes
+- Hide framework complexity
+- Use consistent terminology
+- Include troubleshooting tips
+
+❌ **Don't:**
+- Discuss framework internals
+- Include implementation details of platform services
+- Use technical jargon without explanation
+- Assume knowledge of framework architecture
+
+### Framework Documentation Standards
+
+When creating or updating **framework documentation**:
+
+✅ **Do:**
+- Document design decisions and rationale
+- Include architecture diagrams
+- Explain implementation details
+- Document APIs and interfaces
+- Include code examples for contributors
+- Reference related modules and dependencies
+
+❌ **Don't:**
+- Include user-specific examples
+- Explain basic usage patterns
+- Hide implementation complexity
+- Assume knowledge of user requirements
+
+---
+
+## 🎯 **Quick Navigation**
+
+### I'm an MCP Server Developer...
+→ [USER_GUIDE.md](../USER_GUIDE.md) - **Start here!**
+
+### I'm a Framework Contributor...
+→ [FRAMEWORK_DOCUMENTATION.md](../FRAMEWORK_DOCUMENTATION.md) - **Start here!**
+
+### I need to understand the architecture...
+→ [architecture/overview.md](./architecture/overview.md)
+
+### I need API documentation...
+→ [api-reference/](./api-reference/)
+
+### I need deployment help...
+→ [deployment/README.md](./deployment/README.md)
+
+---
+
+## 🤝 **Contributing to Documentation**
+
+We welcome contributions to both user and framework documentation!
+
+### For User Documentation Contributions
+- Focus on **clarity** and **practicality**
+- Test all code examples
+- Ensure step-by-step guides are accurate
+- Add troubleshooting sections
+
+### For Framework Documentation Contributions
+- Document **design decisions**
+- Include **architecture diagrams**
+- Explain **implementation details**
+- Document **APIs and interfaces**
+- Add **code examples** for contributors
+
+Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed contribution guidelines.
+
+---
+
+## 📞 **Getting Help**
+
+### For MCP Server Developers
+- 📖 [USER_GUIDE.md](../USER_GUIDE.md) - Complete user guide
+- 📖 [TEMPLATE_GUIDE.md](../TEMPLATE_GUIDE.md) - Quick start template
+- 💬 Open an issue in the repository
+
+### For Framework Contributors
+- 📖 [FRAMEWORK_DOCUMENTATION.md](../FRAMEWORK_DOCUMENTATION.md) - Internal documentation
+- 📖 [CONTRIBUTING.md](./CONTRIBUTING.md) - Contribution guidelines
+- 💬 Open an issue or pull request
+
+---
+
+**💡 Remember:** This documentation hub serves two audiences. Make sure you're in the right section for your needs!
