@@ -1,0 +1,35 @@
+{
+  "version": "2.0",
+  "logging": {
+    "applicationInsights": {
+      "samplingSettings": {
+        "isEnabled": true,
+        "excludedTypes": "Request"
+      }
+    },
+    "logLevel": {
+      "default": "Information"
+    }
+  },
+  "extensionBundle": {
+    "id": "Microsoft.Azure.Functions.ExtensionBundle",
+    "version": "[4.*, 5.0.0)"
+  },
+  "functionTimeout": "00:10:00",
+  "functions": [
+    "mcp_health",
+    "mcp_metadata",
+    "mcp_tools_list",
+    "mcp_tools_metadata",
+    "mcp_tools_execute",
+    "mcp_resources_list",
+    "mcp_resources_access",
+    "mcp_prompts_list",
+    "mcp_prompts_get",
+    "mcp_completions",
+    "api_health",
+    "api_tools",
+    "api_metadata",
+    "catch_all"
+  ]
+}
