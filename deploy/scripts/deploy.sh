@@ -1,24 +1,40 @@
 #!/bin/bash
 
-# MCP Framework - Azure Functions Deployment Script
-# This script deploys the MCP Framework as an Azure Function App
+# MCP Framework - Azure Functions v4 Deployment Script
+# Clean implementation using Azure Functions v4 programming model
 
 set -euo pipefail
 
-# Configuration
-RESOURCE_GROUP="${RESOURCE_GROUP:-mcp-dev-rg}"
-LOCATION="${LOCATION:-eastus}"
-FUNCTION_APP_NAME="${FUNCTION_APP_NAME:-mcp-dev-func}"
-STORAGE_ACCOUNT_NAME="${STORAGE_ACCOUNT_NAME:-mcpdevstorage}"
-APPLICATION_INSIGHTS_NAME="${APPLICATION_INSIGHTS_NAME:-mcp-dev-appinsights}"
+# Load environment variables from .env file if it exists
+if [ -f ".env" ]; then
+    set -a
+    source .env
+    set +a
+fi
 
-# Tags - Required for enterprise deployment
+# Configuration from environment variables
+RESOURCE_GROUP="${AZURE_RESOURCE_GROUP:-mcp-dev-rg}"
+LOCATION="${AZURE_LOCATION:-eastus}"
+FUNCTION_APP_NAME="${AZURE_FUNCTION_APP_NAME:-mcp-dev-func}"
+STORAGE_ACCOUNT_NAME="${AZURE_STORAGE_ACCOUNT_NAME:-mcpdevstorage}"
+APPLICATION_INSIGHTS_NAME="${AZURE_APP_INSIGHTS_NAME:-mcp-dev-appinsights}"
+
+# Required Azure resource tags
 APPLICATION_NAME="${APPLICATION_NAME:-MCPFramework}"
 BUSINESS_OWNER="${BUSINESS_OWNER:-business-owner@example.com}"
 COST_CENTRE="${COST_CENTRE:-CC001}"
 ENVIRONMENT="${ENVIRONMENT:-Development}"
 PROJECT="${PROJECT:-MCPPlatform}"
 TECHNICAL_OWNER="${TECHNICAL_OWNER:-tech-owner@example.com}"
+
+# MCP Configuration
+MCP_SERVER_NAME="${MCP_SERVER_NAME:-MCP Framework Server}"
+MCP_SERVER_VERSION="${MCP_SERVER_VERSION:-1.0.0}"
+MCP_PROTOCOL_VERSION="${MCP_PROTOCOL_VERSION:-2024-11-05}"
+MCP_ENVIRONMENT="${MCP_ENVIRONMENT:-Development}"
+
+# Deployment configuration
+DEPLOYMENT_METHOD="${DEPLOYMENT_METHOD:-remote}"
 
 # Colors for output
 RED='\033[0;31m'
@@ -66,22 +82,50 @@ azure_login() {
     log_info "Subscription: $(az account show --query name -o tsv)"
 }
 
+# Validate configuration
+validate_configuration() {
+    log_info "Validating configuration..."
+    
+    # Validate resource names
+    if [[ ! "$FUNCTION_APP_NAME" =~ ^[a-zA-Z0-9-]{2,60}$ ]]; then
+        log_error "Invalid Function App name: $FUNCTION_APP_NAME (must be 2-60 chars, alphanumeric + hyphens)"
+        exit 1
+    fi
+    
+    if [[ ! "$STORAGE_ACCOUNT_NAME" =~ ^[a-z0-9]{3,24}$ ]]; then
+        log_error "Invalid Storage Account name: $STORAGE_ACCOUNT_NAME (must be 3-24 chars, lowercase alphanumeric)"
+        exit 1
+    fi
+    
+    # Validate required tags
+    REQUIRED_TAGS=("APPLICATION_NAME" "BUSINESS_OWNER" "COST_CENTRE" "ENVIRONMENT" "PROJECT" "TECHNICAL_OWNER")
+    for tag in "${REQUIRED_TAGS[@]}"; do
+        if [ -z "${!tag}" ]; then
+            log_error "Required tag $tag is not set"
+            exit 1
+        fi
+    done
+    
+    log_success "Configuration validated"
+}
+
 # Create resource group
 create_resource_group() {
     log_info "Creating resource group: $RESOURCE_GROUP"
     
-    if az group exists --name "$RESOURCE_GROUP"; then
+    if az group exists --name "$RESOURCE_GROUP" 2>/dev/null; then
         log_info "Resource group already exists"
     else
         az group create \
             --name "$RESOURCE_GROUP" \
             --location "$LOCATION" \
-            --tags ApplicationName="$APPLICATION_NAME" \
-                   BusinessOwner="$BUSINESS_OWNER" \
-                   CostCentre="$COST_CENTRE" \
-                   Environment="$ENVIRONMENT" \
-                   Project="$PROJECT" \
-                   TechnicalOwner="$TECHNICAL_OWNER"
+            --tags \
+                ApplicationName="$APPLICATION_NAME" \
+                BusinessOwner="$BUSINESS_OWNER" \
+                CostCentre="$COST_CENTRE" \
+                Environment="$ENVIRONMENT" \
+                Project="$PROJECT" \
+                TechnicalOwner="$TECHNICAL_OWNER"
         
         log_success "Resource group created"
     fi
@@ -101,13 +145,13 @@ create_storage_account() {
             --sku Standard_LRS \
             --kind StorageV2 \
             --access-tier Hot \
-            --enable-hierarchical-namespace false \
-            --tags ApplicationName="$APPLICATION_NAME" \
-                   BusinessOwner="$BUSINESS_OWNER" \
-                   CostCentre="$COST_CENTRE" \
-                   Environment="$ENVIRONMENT" \
-                   Project="$PROJECT" \
-                   TechnicalOwner="$TECHNICAL_OWNER"
+            --tags \
+                ApplicationName="$APPLICATION_NAME" \
+                BusinessOwner="$BUSINESS_OWNER" \
+                CostCentre="$COST_CENTRE" \
+                Environment="$ENVIRONMENT" \
+                Project="$PROJECT" \
+                TechnicalOwner="$TECHNICAL_OWNER"
         
         log_success "Storage account created"
     fi
@@ -127,38 +171,25 @@ create_application_insights() {
             --kind web \
             --application-type web \
             --retention-time 90 \
-            --tags ApplicationName="$APPLICATION_NAME" \
-                   BusinessOwner="$BUSINESS_OWNER" \
-                   CostCentre="$COST_CENTRE" \
-                   Environment="$ENVIRONMENT" \
-                   Project="$PROJECT" \
-                   TechnicalOwner="$TECHNICAL_OWNER"
+            --tags \
+                ApplicationName="$APPLICATION_NAME" \
+                BusinessOwner="$BUSINESS_OWNER" \
+                CostCentre="$COST_CENTRE" \
+                Environment="$ENVIRONMENT" \
+                Project="$PROJECT" \
+                TechnicalOwner="$TECHNICAL_OWNER"
         
         log_success "Application Insights created"
     fi
 }
 
-# Create Function App (Consumption Plan)
+# Create Function App
 create_function_app() {
     log_info "Creating Function App: $FUNCTION_APP_NAME"
     
     if az functionapp show --name "$FUNCTION_APP_NAME" --resource-group "$RESOURCE_GROUP" &> /dev/null; then
         log_info "Function App already exists"
     else
-        # Get storage account connection string
-        STORAGE_CONNECTION_STRING=$(az storage account show-connection-string \
-            --name "$STORAGE_ACCOUNT_NAME" \
-            --resource-group "$RESOURCE_GROUP" \
-            --query connectionString \
-            -o tsv)
-        
-        # Get Application Insights instrumentation key
-        APP_INSIGHTS_KEY=$(az monitor app-insights show \
-            --name "$APPLICATION_INSIGHTS_NAME" \
-            --resource-group "$RESOURCE_GROUP" \
-            --query instrumentationKey \
-            -o tsv)
-        
         az functionapp create \
             --name "$FUNCTION_APP_NAME" \
             --resource-group "$RESOURCE_GROUP" \
@@ -168,27 +199,24 @@ create_function_app() {
             --functions-version 4 \
             --storage-account "$STORAGE_ACCOUNT_NAME" \
             --os-type Linux \
-            --tags ApplicationName="$APPLICATION_NAME" \
-                   BusinessOwner="$BUSINESS_OWNER" \
-                   CostCentre="$COST_CENTRE" \
-                   Environment="$ENVIRONMENT" \
-                   Project="$PROJECT" \
-                   TechnicalOwner="$TECHNICAL_OWNER" \
-            --app-insights "$APPLICATION_INSIGHTS_NAME"
+            --tags \
+                ApplicationName="$APPLICATION_NAME" \
+                BusinessOwner="$BUSINESS_OWNER" \
+                CostCentre="$COST_CENTRE" \
+                Environment="$ENVIRONMENT" \
+                Project="$PROJECT" \
+                TechnicalOwner="$TECHNICAL_OWNER"
         
         log_success "Function App created"
-        
-        # Configure Function App settings
-        configure_function_app_settings
     fi
 }
 
 # Configure Function App settings
-configure_function_app_settings() {
+configure_function_app() {
     log_info "Configuring Function App settings..."
     
     # Get storage account connection string
-    STORAGE_CONNECTION_STRING=$(az storage account show-connection-string \
+    STORAGE_CONNECTION=$(az storage account show-connection-string \
         --name "$STORAGE_ACCOUNT_NAME" \
         --resource-group "$RESOURCE_GROUP" \
         --query connectionString \
@@ -206,7 +234,7 @@ configure_function_app_settings() {
         --name "$FUNCTION_APP_NAME" \
         --resource-group "$RESOURCE_GROUP" \
         --settings \
-            AzureWebJobsStorage="$STORAGE_CONNECTION_STRING" \
+            AzureWebJobsStorage="$STORAGE_CONNECTION" \
             FUNCTIONS_WORKER_RUNTIME=python \
             FUNCTIONS_EXTENSION_VERSION=~4 \
             APPINSIGHTS_INSTRUMENTATIONKEY="$APP_INSIGHTS_KEY" \
@@ -221,9 +249,11 @@ configure_function_app_settings() {
         --name "$FUNCTION_APP_NAME" \
         --resource-group "$RESOURCE_GROUP" \
         --settings \
-            MCP_DOMAIN="MCPFramework" \
-            MCP_ENVIRONMENT="$ENVIRONMENT" \
-            MCP_VERSION="1.0.0" \
+            MCP_SERVER_NAME="$MCP_SERVER_NAME" \
+            MCP_SERVER_VERSION="$MCP_SERVER_VERSION" \
+            MCP_PROTOCOL_VERSION="$MCP_PROTOCOL_VERSION" \
+            MCP_ENVIRONMENT="$MCP_ENVIRONMENT" \
+            MCP_DOMAIN="${MCP_DOMAIN:-Unknown}" \
             MCP_ENABLE_TELEMETRY=true \
             MCP_ENABLE_AUDIT=true \
             MCP_ENABLE_AUTH=false \
@@ -237,35 +267,34 @@ configure_function_app_settings() {
 deploy_function_app() {
     log_info "Deploying Function App..."
     
-    # Check if we're using remote build (Oryx) or local build
-    DEPLOYMENT_METHOD="${DEPLOYMENT_METHOD:-remote}"
+    # Create deployment package
+    cd src/azure
+    zip -r ../../deployment-package.zip . > /dev/null 2>&1
+    cd ../../
     
     if [ "$DEPLOYMENT_METHOD" = "remote" ]; then
         log_info "Using remote build (Oryx)..."
         
-        # Deploy from the src/azure directory
         az functionapp deployment source config-zip \
             --name "$FUNCTION_APP_NAME" \
             --resource-group "$RESOURCE_GROUP" \
-            --src ./src/azure.zip
+            --src ./deployment-package.zip
         
         log_success "Function App deployed using remote build"
     else
         log_info "Using local build..."
         
-        # Create a deployment package
-        cd src/azure
-        zip -r ../azure-deployment.zip .
-        cd ../..
-        
         az functionapp deployment source config-zip \
             --name "$FUNCTION_APP_NAME" \
             --resource-group "$RESOURCE_GROUP" \
-            --src ./src/azure-deployment.zip \
+            --src ./deployment-package.zip \
             --no-build
         
         log_success "Function App deployed using local build"
     fi
+    
+    # Clean up
+    rm -f ./deployment-package.zip
 }
 
 # Verify deployment
@@ -294,9 +323,19 @@ verify_deployment() {
         -o tsv)
     
     if [ -z "$FUNCTIONS" ]; then
-        log_warning "No functions found. This might be expected during initial deployment."
+        log_warning "No functions found"
     else
         log_info "Functions deployed: $FUNCTIONS"
+        
+        # Check for MCP functions
+        MCP_FUNCTIONS=("mcp_health" "mcp_metadata" "mcp_tools_list" "mcp_tools_metadata" "mcp_tools_execute" "mcp_resources_list" "mcp_resources_access" "mcp_prompts_list" "mcp_prompts_get" "mcp_completions")
+        for func in "${MCP_FUNCTIONS[@]}"; do
+            if echo "$FUNCTIONS" | grep -q "$func"; then
+                log_success "MCP function $func deployed"
+            else
+                log_error "MCP function $func not found"
+            fi
+        done
     fi
     
     # Get Function App URL
@@ -309,23 +348,33 @@ verify_deployment() {
     log_success "Function App URL: https://$FUNCTION_APP_URL"
     
     # Test health endpoint
-    log_info "Testing health endpoint..."
-    HEALTH_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "https://$FUNCTION_APP_URL/api/health")
-    
-    if [ "$HEALTH_RESPONSE" = "200" ]; then
-        log_success "Health endpoint is responding"
+    log_info "Testing MCP health endpoint..."
+    if command -v curl &> /dev/null; then
+        HEALTH_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "https://$FUNCTION_APP_URL/mcp/health")
+        if [ "$HEALTH_RESPONSE" = "200" ]; then
+            log_success "MCP health endpoint is responding"
+        else
+            log_warning "MCP health endpoint returned HTTP $HEALTH_RESPONSE"
+        fi
     else
-        log_warning "Health endpoint returned HTTP $HEALTH_RESPONSE"
+        log_warning "curl not available, cannot test endpoints"
     fi
+}
+
+# Clean up resources
+cleanup() {
+    log_info "Cleaning up temporary files..."
+    rm -f ./deployment-package.zip
 }
 
 # Main deployment function
 main() {
-    log_info "Starting MCP Framework Azure Functions deployment..."
+    log_info "Starting MCP Framework Azure Functions v4 deployment..."
     
     # Check prerequisites
     check_azure_cli
     azure_login
+    validate_configuration
     
     # Create infrastructure
     create_resource_group
@@ -333,13 +382,17 @@ main() {
     create_application_insights
     create_function_app
     
-    # Deploy the application
+    # Configure and deploy
+    configure_function_app
     deploy_function_app
     
     # Verify deployment
     verify_deployment
     
-    log_success "MCP Framework deployment completed successfully!"
+    # Clean up
+    cleanup
+    
+    log_success "MCP Framework v4 deployment completed successfully!"
 }
 
 # Parse command line arguments
@@ -380,13 +433,11 @@ while [[ $# -gt 0 ]]; do
             echo "  --app-insights-name <name>       Application Insights name"
             echo "  --deployment-method <method>     Deployment method: remote or local"
             echo ""
-            echo "Environment variables:"
-            echo "  APPLICATION_NAME          Application name for tagging"
-            echo "  BUSINESS_OWNER           Business owner for tagging"
-            echo "  COST_CENTRE              Cost centre for tagging"
-            echo "  ENVIRONMENT               Environment for tagging"
-            echo "  PROJECT                  Project name for tagging"
-            echo "  TECHNICAL_OWNER          Technical owner for tagging"
+            echo "Environment variables can also be set in .env file:"
+            echo "  AZURE_RESOURCE_GROUP, AZURE_LOCATION, AZURE_FUNCTION_APP_NAME,"
+            echo "  AZURE_STORAGE_ACCOUNT_NAME, AZURE_APP_INSIGHTS_NAME,"
+            echo "  APPLICATION_NAME, BUSINESS_OWNER, COST_CENTRE,"
+            echo "  ENVIRONMENT, PROJECT, TECHNICAL_OWNER"
             exit 0
             ;;
         *)
@@ -398,6 +449,3 @@ done
 
 # Run main function
 main "$@"
-
-# Clean up temporary files
-rm -f ./src/azure-deployment.zip

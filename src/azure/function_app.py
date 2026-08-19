@@ -1,7 +1,16 @@
 """
-MCP Framework Azure Function App
-This module exports the FunctionApp object required by Azure Functions Python v2
+MCP Framework - Azure Functions v4 Implementation
+Clean implementation using explicit @app.function_name decorators
+
+This is the main entry point for Azure Functions v4 Python programming model.
+All MCP Protocol endpoints are implemented as individual functions with explicit decorators.
+
+Compatible with:
+- Azure Functions v4 Python
+- Model Context Protocol (MCP) v2024-11-05
+- Microsoft Copilot and Copilot Studio
 """
+
 import azure.functions as func
 import logging
 import json
@@ -16,374 +25,482 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Import platform framework components
-try:
-    from platform.framework import (
-        get_framework, 
-        initialize_framework,
-        MCPFramework
-    )
-    from platform.auth import (
-        get_authenticator,
-        AuthenticationResult,
-        AuthenticationError
-    )
-    from platform.registration import get_tool_registry
-    from platform.telemetry import get_telemetry_collector, track_tool_telemetry
-    from platform.audit import get_audit_logger, audit_tool_access
-    from platform.errors import get_error_handler, MCPError
-    from platform.config import get_config_manager
-    PLATFORM_IMPORTS_AVAILABLE = True
-except ImportError as e:
-    logger.warning(f"Platform imports not available: {e}")
-    PLATFORM_IMPORTS_AVAILABLE = False
+# Create the FunctionApp instance - REQUIRED FOR AZURE FUNCTIONS V4
+app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
+
+# MCP Protocol Constants
+MCP_PROTOCOL_VERSION = "2024-11-05"
+MCP_SERVER_NAME = os.getenv('MCP_SERVER_NAME', 'MCP Framework Server')
+MCP_SERVER_VERSION = os.getenv('MCP_SERVER_VERSION', '1.0.0')
 
 
-class MCPFunctionApp:
+# ============================================================================
+# MCP PROTOCOL ENDPOINTS
+# These endpoints implement the Model Context Protocol (MCP) specification
+# Required for Microsoft Copilot and Copilot Studio integration
+# ============================================================================
+
+@app.function_name(name="mcp_health")
+@app.route(route="mcp/health", methods=["GET"])
+def mcp_health(req: func.HttpRequest) -> func.HttpResponse:
     """
-    Main class for MCP Function App.
-    Handles HTTP requests, authentication, tool routing, and response generation.
+    MCP Health Check Endpoint
+    Required by Copilot to verify server availability
     """
+    health_status = {
+        "status": "healthy",
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "server": MCP_SERVER_NAME,
+        "version": MCP_SERVER_VERSION,
+        "protocol": MCP_PROTOCOL_VERSION,
+        "environment": os.environ.get('MCP_ENVIRONMENT', 'Dev')
+    }
     
-    def __init__(self):
-        """Initialize the MCP Function App"""
-        self.framework: Optional[MCPFramework] = None
-        self._initialized = False
+    return func.HttpResponse(
+        json.dumps(health_status),
+        status_code=200,
+        mimetype='application/json'
+    )
+
+
+@app.function_name(name="mcp_metadata")
+@app.route(route="mcp/metadata", methods=["GET"])
+def mcp_metadata(req: func.HttpRequest) -> func.HttpResponse:
+    """
+    MCP Server Metadata Endpoint
+    Required by Copilot to discover server capabilities
+    """
+    metadata = {
+        "name": MCP_SERVER_NAME,
+        "version": MCP_SERVER_VERSION,
+        "protocol": MCP_PROTOCOL_VERSION,
+        "description": "MCP Framework Server for Microsoft Copilot and Copilot Studio",
+        "capabilities": {
+            "tools": True,
+            "resources": True,
+            "prompts": True,
+            "completions": True
+        },
+        "endpoints": {
+            "health": "/mcp/health",
+            "metadata": "/mcp/metadata",
+            "tools": "/mcp/tools",
+            "resources": "/mcp/resources",
+            "prompts": "/mcp/prompts",
+            "completions": "/mcp/completions"
+        }
+    }
+    
+    return func.HttpResponse(
+        json.dumps(metadata),
+        status_code=200,
+        mimetype='application/json'
+    )
+
+
+@app.function_name(name="mcp_tools_list")
+@app.route(route="mcp/tools", methods=["GET"])
+def mcp_tools_list(req: func.HttpRequest) -> func.HttpResponse:
+    """
+    MCP Tools List Endpoint
+    Required by Copilot to discover available tools
+    """
+    try:
+        from platform.registration import get_tool_registry
+        registry = get_tool_registry()
+        tools = registry.get_all_tools()
         
-        # Initialize framework
-        self._initialize_framework()
-    
-    def _initialize_framework(self):
-        """Initialize the MCP Platform Framework"""
-        if self._initialized:
-            return
+        tools_list = []
+        for tool in tools:
+            tools_list.append({
+                "name": tool.metadata.name,
+                "description": tool.metadata.description,
+                "domain": tool.metadata.domain,
+                "version": tool.metadata.version
+            })
         
-        try:
-            # Get configuration from environment
-            domain = os.getenv('MCP_DOMAIN', 'unknown')
-            environment = os.getenv('MCP_ENVIRONMENT', 'Dev')
-            
-            # Initialize framework
-            self.framework = initialize_framework(
-                domain=domain,
-                environment=environment
-            )
-            
-            logger.info(f"MCP Framework initialized for domain: {domain}")
-            self._initialized = True
-            
-        except Exception as e:
-            logger.error(f"Error initializing MCP Framework: {str(e)}")
-            raise
-    
-    def handle_request(self, req: func.HttpRequest) -> func.HttpResponse:
-        """
-        Handle an HTTP request to the MCP Function App.
+        return func.HttpResponse(
+            json.dumps({
+                "tools": tools_list,
+                "count": len(tools_list)
+            }),
+            status_code=200,
+            mimetype='application/json'
+        )
         
-        Args:
-            req: Azure Functions HTTP request
-            
-        Returns:
-            Azure Functions HTTP response
-        """
-        start_time = datetime.utcnow()
+    except ImportError:
+        # Platform imports not available
+        logger.warning("Platform imports not available, returning empty tool list")
+        return func.HttpResponse(
+            json.dumps({
+                "tools": [],
+                "count": 0
+            }),
+            status_code=200,
+            mimetype='application/json'
+        )
+    except Exception as e:
+        logger.error(f"Error listing tools: {str(e)}")
+        return func.HttpResponse(
+            json.dumps({"error": str(e)}),
+            status_code=500,
+            mimetype='application/json'
+        )
+
+
+@app.function_name(name="mcp_tools_metadata")
+@app.route(route="mcp/tools/{tool_name}", methods=["GET"])
+def mcp_tools_metadata(req: func.HttpRequest, tool_name: str) -> func.HttpResponse:
+    """
+    MCP Tool Metadata Endpoint
+    Required by Copilot to understand tool parameters and return types
+    """
+    try:
+        from platform.registration import get_tool_registry
+        registry = get_tool_registry()
+        tool = registry.get_tool_by_name(tool_name)
         
-        try:
-            # Extract request information
-            method = req.method
-            path = req.path
-            headers = dict(req.headers)
-            query_params = dict(req.params)
-            
-            # Parse request body
-            try:
-                body = req.get_json() if req.get_body() else {}
-            except Exception:
-                body = {}
-            
-            logger.info(f"Received {method} request for {path}")
-            
-            # Handle different endpoints
-            if path.startswith('/api/tools'):
-                return self._handle_tools_request(method, path, headers, query_params, body)
-            elif path.startswith('/api/health'):
-                return self._handle_health_request()
-            elif path.startswith('/api/metadata'):
-                return self._handle_metadata_request()
-            elif path.startswith('/tools'):
-                return self._handle_tool_execution(path, headers, body)
-            else:
-                return func.HttpResponse("Not found", status_code=404)
-                
-        except Exception as e:
-            return self._handle_error(e, start_time)
-    
-    def _handle_tools_request(self, method: str, path: str, headers: Dict[str, str], 
-                              query_params: Dict[str, str], body: Dict[str, Any]) -> func.HttpResponse:
-        """Handle requests to /api/tools endpoint"""
-        try:
-            if not PLATFORM_IMPORTS_AVAILABLE:
-                return func.HttpResponse(
-                    json.dumps({'error': 'Platform framework not available'}),
-                    status_code=500,
-                    mimetype='application/json'
-                )
-                
-            registry = get_tool_registry()
-            
-            if method == 'GET':
-                # List all tools
-                tools = registry.get_all_tools()
-                tool_list = [
-                    {
-                        'id': tool.tool_id,
-                        'name': tool.metadata.name,
-                        'description': tool.metadata.description,
-                        'domain': tool.metadata.domain,
-                        'type': tool.metadata.tool_type.value,
-                        'status': tool.metadata.status.value,
-                        'classification': tool.metadata.classification,
-                        'endpoint': tool.endpoint
-                    }
-                    for tool in tools
-                ]
-                
-                return func.HttpResponse(
-                    json.dumps({'tools': tool_list, 'count': len(tool_list)}),
-                    status_code=200,
-                    mimetype='application/json'
-                )
-            elif method == 'POST':
-                # Register a new tool (admin only)
-                return func.HttpResponse(
-                    json.dumps({'error': 'Tool registration not supported via API'}),
-                    status_code=405,
-                    mimetype='application/json'
-                )
-            else:
-                return func.HttpResponse(
-                    json.dumps({'error': 'Method not allowed'}),
-                    status_code=405,
-                    mimetype='application/json'
-                )
-                
-        except Exception as e:
-            logger.error(f"Error handling tools request: {str(e)}")
+        if not tool:
             return func.HttpResponse(
-                json.dumps({'error': str(e)}),
-                status_code=500,
+                json.dumps({"error": f"Tool '{tool_name}' not found"}),
+                status_code=404,
                 mimetype='application/json'
             )
-    
-    def _handle_health_request(self) -> func.HttpResponse:
-        """Handle health check requests"""
-        try:
-            health_status = {
-                'status': 'healthy',
-                'version': '1.0.0',
-                'environment': os.environ.get('AZURE_FUNCTIONS_ENVIRONMENT', 'Dev'),
-                'timestamp': datetime.utcnow().isoformat()
-            }
-            
-            if self.framework:
-                health_status['framework_status'] = 'initialized'
-            else:
-                health_status['framework_status'] = 'not_initialized'
-            
+        
+        return func.HttpResponse(
+            json.dumps({
+                "name": tool.metadata.name,
+                "description": tool.metadata.description,
+                "domain": tool.metadata.domain,
+                "version": tool.metadata.version,
+                "inputSchema": tool.metadata.input_schema or {},
+                "outputSchema": tool.metadata.output_schema or {}
+            }),
+            status_code=200,
+            mimetype='application/json'
+        )
+        
+    except ImportError:
+        logger.warning("Platform imports not available")
+        return func.HttpResponse(
+            json.dumps({"error": f"Tool '{tool_name}' not found"}),
+            status_code=404,
+            mimetype='application/json'
+        )
+    except Exception as e:
+        logger.error(f"Error getting tool metadata: {str(e)}")
+        return func.HttpResponse(
+            json.dumps({"error": str(e)}),
+            status_code=500,
+            mimetype='application/json'
+        )
+
+
+@app.function_name(name="mcp_tools_execute")
+@app.route(route="mcp/tools/{tool_name}/execute", methods=["POST"])
+def mcp_tools_execute(req: func.HttpRequest, tool_name: str) -> func.HttpResponse:
+    """
+    MCP Tool Execution Endpoint
+    Required by Copilot to execute tools with user-provided arguments
+    """
+    try:
+        body = req.get_json() if req.get_body() else {}
+        arguments = body.get('arguments', {})
+        
+        from platform.registration import get_tool_registry
+        registry = get_tool_registry()
+        tool = registry.get_tool_by_name(tool_name)
+        
+        if not tool:
             return func.HttpResponse(
-                json.dumps(health_status),
-                status_code=200,
+                json.dumps({"error": f"Tool '{tool_name}' not found"}),
+                status_code=404,
                 mimetype='application/json'
             )
-        except Exception as e:
+        
+        # Execute the tool
+        module_name, func_name = tool.handler.rsplit('.', 1)
+        import importlib
+        module = importlib.import_module(module_name)
+        tool_func = getattr(module, func_name)
+        
+        result = tool_func(**arguments)
+        
+        return func.HttpResponse(
+            json.dumps({
+                "success": True,
+                "result": result,
+                "tool": tool_name
+            }),
+            status_code=200,
+            mimetype='application/json'
+        )
+        
+    except ImportError as e:
+        logger.error(f"Platform imports not available: {str(e)}")
+        return func.HttpResponse(
+            json.dumps({"error": f"Tool '{tool_name}' not found"}),
+            status_code=404,
+            mimetype='application/json'
+        )
+    except Exception as e:
+        logger.error(f"Error executing tool {tool_name}: {str(e)}")
+        return func.HttpResponse(
+            json.dumps({
+                "success": False,
+                "error": str(e),
+                "tool": tool_name
+            }),
+            status_code=500,
+            mimetype='application/json'
+        )
+
+
+@app.function_name(name="mcp_resources_list")
+@app.route(route="mcp/resources", methods=["GET"])
+def mcp_resources_list(req: func.HttpRequest) -> func.HttpResponse:
+    """
+    MCP Resources List Endpoint
+    Required by Copilot to discover available data resources
+    """
+    try:
+        from platform.catalog import get_catalog_client
+        client = get_catalog_client()
+        resources = client.get_all_resources()
+        
+        resources_list = []
+        for resource in resources:
+            resources_list.append({
+                "name": resource.name,
+                "description": resource.description,
+                "type": resource.type,
+                "uri": resource.uri,
+                "mimeType": resource.mime_type
+            })
+        
+        return func.HttpResponse(
+            json.dumps({
+                "resources": resources_list,
+                "count": len(resources_list)
+            }),
+            status_code=200,
+            mimetype='application/json'
+        )
+        
+    except ImportError:
+        logger.warning("Platform catalog not available")
+        return func.HttpResponse(
+            json.dumps({
+                "resources": [],
+                "count": 0
+            }),
+            status_code=200,
+            mimetype='application/json'
+        )
+    except Exception as e:
+        logger.error(f"Error listing resources: {str(e)}")
+        return func.HttpResponse(
+            json.dumps({"error": str(e)}),
+            status_code=500,
+            mimetype='application/json'
+        )
+
+
+@app.function_name(name="mcp_resources_access")
+@app.route(route="mcp/resources/{resource_name}", methods=["GET"])
+def mcp_resources_access(req: func.HttpRequest, resource_name: str) -> func.HttpResponse:
+    """
+    MCP Resource Access Endpoint
+    Required by Copilot to access resource data
+    """
+    try:
+        from platform.catalog import get_catalog_client
+        client = get_catalog_client()
+        resource = client.get_resource_by_name(resource_name)
+        
+        if not resource:
             return func.HttpResponse(
-                json.dumps({'status': 'unhealthy', 'error': str(e)}),
-                status_code=500,
+                json.dumps({"error": f"Resource '{resource_name}' not found"}),
+                status_code=404,
                 mimetype='application/json'
             )
-    
-    def _handle_metadata_request(self) -> func.HttpResponse:
-        """Handle metadata requests"""
-        try:
-            metadata = {
-                'name': 'MCP Framework',
-                'version': '1.0.0',
-                'description': 'Microsoft Cloud Platform Framework for Azure Functions',
-                'domain': os.getenv('MCP_DOMAIN', 'unknown'),
-                'environment': os.getenv('MCP_ENVIRONMENT', 'Dev')
-            }
-            
+        
+        return func.HttpResponse(
+            json.dumps({
+                "name": resource.name,
+                "description": resource.description,
+                "type": resource.type,
+                "uri": resource.uri,
+                "mimeType": resource.mime_type
+            }),
+            status_code=200,
+            mimetype='application/json'
+        )
+        
+    except ImportError:
+        logger.warning("Platform catalog not available")
+        return func.HttpResponse(
+            json.dumps({"error": f"Resource '{resource_name}' not found"}),
+            status_code=404,
+            mimetype='application/json'
+        )
+    except Exception as e:
+        logger.error(f"Error accessing resource {resource_name}: {str(e)}")
+        return func.HttpResponse(
+            json.dumps({"error": str(e)}),
+            status_code=500,
+            mimetype='application/json'
+        )
+
+
+@app.function_name(name="mcp_prompts_list")
+@app.route(route="mcp/prompts", methods=["GET"])
+def mcp_prompts_list(req: func.HttpRequest) -> func.HttpResponse:
+    """
+    MCP Prompts List Endpoint
+    Required by Copilot Studio for prompt template discovery
+    """
+    try:
+        from platform.template import get_template_generator
+        generator = get_template_generator()
+        prompts = generator.get_all_prompts()
+        
+        prompts_list = []
+        for prompt in prompts:
+            prompts_list.append({
+                "name": prompt.name,
+                "description": prompt.description
+            })
+        
+        return func.HttpResponse(
+            json.dumps({
+                "prompts": prompts_list,
+                "count": len(prompts_list)
+            }),
+            status_code=200,
+            mimetype='application/json'
+        )
+        
+    except ImportError:
+        logger.warning("Platform template generator not available")
+        return func.HttpResponse(
+            json.dumps({
+                "prompts": [],
+                "count": 0
+            }),
+            status_code=200,
+            mimetype='application/json'
+        )
+    except Exception as e:
+        logger.error(f"Error listing prompts: {str(e)}")
+        return func.HttpResponse(
+            json.dumps({"error": str(e)}),
+            status_code=500,
+            mimetype='application/json'
+        )
+
+
+@app.function_name(name="mcp_prompts_get")
+@app.route(route="mcp/prompts/{prompt_name}", methods=["GET"])
+def mcp_prompts_get(req: func.HttpRequest, prompt_name: str) -> func.HttpResponse:
+    """
+    MCP Prompt Template Endpoint
+    Required by Copilot Studio to retrieve prompt templates
+    """
+    try:
+        from platform.template import get_template_generator
+        generator = get_template_generator()
+        prompt = generator.get_prompt_by_name(prompt_name)
+        
+        if not prompt:
             return func.HttpResponse(
-                json.dumps(metadata),
-                status_code=200,
+                json.dumps({"error": f"Prompt '{prompt_name}' not found"}),
+                status_code=404,
                 mimetype='application/json'
             )
-        except Exception as e:
+        
+        return func.HttpResponse(
+            json.dumps({
+                "name": prompt.name,
+                "description": prompt.description,
+                "template": prompt.template,
+                "arguments": prompt.arguments
+            }),
+            status_code=200,
+            mimetype='application/json'
+        )
+        
+    except ImportError:
+        logger.warning("Platform template generator not available")
+        return func.HttpResponse(
+            json.dumps({"error": f"Prompt '{prompt_name}' not found"}),
+            status_code=404,
+            mimetype='application/json'
+        )
+    except Exception as e:
+        logger.error(f"Error getting prompt {prompt_name}: {str(e)}")
+        return func.HttpResponse(
+            json.dumps({"error": str(e)}),
+            status_code=500,
+            mimetype='application/json'
+        )
+
+
+@app.function_name(name="mcp_completions")
+@app.route(route="mcp/completions", methods=["POST"])
+def mcp_completions(req: func.HttpRequest) -> func.HttpResponse:
+    """
+    MCP Completions Endpoint
+    Required by Copilot Studio to generate completions from prompt templates
+    """
+    try:
+        body = req.get_json() if req.get_body() else {}
+        prompt_name = body.get('prompt')
+        context = body.get('context', {})
+        
+        if not prompt_name:
             return func.HttpResponse(
-                json.dumps({'error': str(e)}),
-                status_code=500,
-                mimetype='application/json'
-            )
-    
-    def _handle_tool_execution(self, path: str, headers: Dict[str, str], body: Dict[str, Any]) -> func.HttpResponse:
-        """Handle tool execution requests"""
-        try:
-            if not PLATFORM_IMPORTS_AVAILABLE:
-                return func.HttpResponse(
-                    json.dumps({'error': 'Platform framework not available'}),
-                    status_code=500,
-                    mimetype='application/json'
-                )
-            
-            # Extract tool name from path
-            parts = path.split('/')
-            if len(parts) >= 2:
-                tool_name = parts[1]
-                if len(parts) >= 3 and parts[2] == 'execute':
-                    return self._execute_tool(headers, body, tool_name)
-                else:
-                    return self._get_tool_metadata(tool_name)
-            
-            return func.HttpResponse(
-                json.dumps({'error': 'Invalid path'}),
+                json.dumps({"error": "prompt parameter is required"}),
                 status_code=400,
                 mimetype='application/json'
             )
-            
-        except Exception as e:
-            logger.error(f"Error handling tool execution: {str(e)}")
+        
+        from platform.template import get_template_generator
+        generator = get_template_generator()
+        prompt = generator.get_prompt_by_name(prompt_name)
+        
+        if not prompt:
             return func.HttpResponse(
-                json.dumps({'error': str(e)}),
-                status_code=500,
+                json.dumps({"error": f"Prompt '{prompt_name}' not found"}),
+                status_code=404,
                 mimetype='application/json'
             )
-    
-    def _execute_tool(self, headers: Dict[str, str], body: Dict[str, Any], tool_name: str) -> func.HttpResponse:
-        """Execute a specific tool"""
-        try:
-            if not PLATFORM_IMPORTS_AVAILABLE:
-                return func.HttpResponse(
-                    json.dumps({'error': 'Platform framework not available'}),
-                    status_code=500,
-                    mimetype='application/json'
-                )
-            
-            arguments = body.get('arguments', {})
-            registry = get_tool_registry()
-            tool = registry.get_tool_by_name(tool_name)
-            
-            if not tool:
-                return func.HttpResponse(
-                    json.dumps({'error': f'Tool {tool_name} not found'}),
-                    status_code=404,
-                    mimetype='application/json'
-                )
-            
-            # Execute tool
-            module_name, func_name = tool.handler.rsplit('.', 1)
-            import importlib
-            module = importlib.import_module(module_name)
-            tool_func = getattr(module, func_name)
-            
-            result = tool_func(**arguments)
-            registry.increment_usage(tool.tool_id, success=True)
-            
-            return func.HttpResponse(
-                json.dumps({'success': True, 'result': result}),
-                status_code=200,
-                mimetype='application/json'
-            )
-            
-        except Exception as e:
-            logger.error(f"Error executing tool {tool_name}: {str(e)}")
-            if PLATFORM_IMPORTS_AVAILABLE:
-                from platform.errors import handle_exception
-                error_response = handle_exception(e)
-                return func.HttpResponse(
-                    json.dumps(error_response.dict()),
-                    status_code=500,
-                    mimetype='application/json'
-                )
-            else:
-                return func.HttpResponse(
-                    json.dumps({'error': str(e)}),
-                    status_code=500,
-                    mimetype='application/json'
-                )
-    
-    def _get_tool_metadata(self, tool_name: str) -> func.HttpResponse:
-        """Get metadata for a specific tool"""
-        try:
-            if not PLATFORM_IMPORTS_AVAILABLE:
-                return func.HttpResponse(
-                    json.dumps({'error': 'Platform framework not available'}),
-                    status_code=500,
-                    mimetype='application/json'
-                )
-            
-            registry = get_tool_registry()
-            tool = registry.get_tool_by_name(tool_name)
-            
-            if not tool:
-                return func.HttpResponse(
-                    json.dumps({'error': f'Tool {tool_name} not found'}),
-                    status_code=404,
-                    mimetype='application/json'
-                )
-            
-            return func.HttpResponse(
-                json.dumps({
-                    'name': tool.metadata.name,
-                    'description': tool.metadata.description,
-                    'domain': tool.metadata.domain,
-                    'version': tool.metadata.version
-                }),
-                status_code=200,
-                mimetype='application/json'
-            )
-            
-        except Exception as e:
-            logger.error(f"Error getting tool metadata: {str(e)}")
-            return func.HttpResponse(
-                json.dumps({'error': str(e)}),
-                status_code=500,
-                mimetype='application/json'
-            )
-    
-    def _handle_error(self, e: Exception, start_time: datetime) -> func.HttpResponse:
-        """Handle errors and return appropriate response"""
-        try:
-            if PLATFORM_IMPORTS_AVAILABLE:
-                from platform.errors import handle_exception
-                error_response = handle_exception(e)
-                return func.HttpResponse(
-                    json.dumps(error_response.dict()),
-                    status_code=500,
-                    mimetype='application/json'
-                )
-            else:
-                return func.HttpResponse(
-                    json.dumps({
-                        'error': str(e),
-                        'type': type(e).__name__,
-                        'timestamp': datetime.utcnow().isoformat()
-                    }),
-                    status_code=500,
-                    mimetype='application/json'
-                )
-        except Exception as inner_e:
-            return func.HttpResponse(
-                json.dumps({
-                    'error': f'Error processing error: {str(inner_e)}',
-                    'original_error': str(e)
-                }),
-                status_code=500,
-                mimetype='application/json'
-            )
-
-
-# Create the FunctionApp instance - THIS IS REQUIRED FOR AZURE FUNCTIONS V2
-app = MCPFunctionApp()
-
-# Export the app object for Azure Functions
-# This is the critical requirement for Python v2 programming model
+        
+        # Apply context to template
+        template = prompt.template
+        for key, value in context.items():
+            template = template.replace(f"{{{{{key}}}}}", str(value))
+        
+        return func.HttpResponse(
+            json.dumps({
+                "completion": template,
+                "prompt": prompt_name
+            }),
+            status_code=200,
+            mimetype='application/json'
+        )
+        
+    except ImportError:
+        logger.warning("Platform template generator not available")
+        return func.HttpResponse(
+            json.dumps({"error": "Prompt templates not available"}),
+            status_code=500,
+            mimetype='application/json'
+        )
+    except Exception as e:
+        logger.error(f"Error generating completion: {str(e)}")
+        return func.HttpResponse(
+            json.dumps({"error": str(e)}),
+            status_code=500,
+            mimetype='application/json'
+        )

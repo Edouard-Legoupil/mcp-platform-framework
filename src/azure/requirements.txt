@@ -1,9 +1,10 @@
-# MCP Framework - Azure Functions Requirements
+# MCP Framework - Azure Functions v4 Requirements
 # Python 3.11+ compatible
-# Azure Functions Python v2 programming model
+# Azure Functions Python v4 programming model
+# Clean production dependencies only
 
 # Azure Functions Core (REQUIRED)
-azure-functions>=1.15.0
+azure-functions>=1.21.0
 
 # Azure SDK dependencies
 azure-identity>=1.10.0
@@ -20,7 +21,7 @@ opentelemetry-instrumentation-azure-functions>=1.0.0
 
 # Core framework dependencies
 pydantic>=2.0.0
-python-jose[cryptography]>=3.3.0
+python-jose[cryptography]>=3.3.0,<42.0.0
 passlib[bcrypt]>=1.7.4
 PyJWT>=2.8.0
 

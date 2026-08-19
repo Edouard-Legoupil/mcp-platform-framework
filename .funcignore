@@ -41,6 +41,9 @@ wheels/
 .installed.cfg
 *.egg
 
+# Python packages (Oryx build output)
+.python_packages/
+
 # Testing
 .tests/
 tests/
@@ -67,6 +70,8 @@ logs/
 # Local development
 local.settings.json
 local.settings.json.bak
+.env
+.env.*
 
 # Deployment artifacts
 deploy/
@@ -102,7 +107,6 @@ README.md
 !src/azure/
 !src/azure/**/*
 
-# Ensure host.json and function.json are deployed
+# Ensure host.json and requirements.txt are deployed
 !src/azure/host.json
-!src/azure/function.json
 !src/azure/requirements.txt
