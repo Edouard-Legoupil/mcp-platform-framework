@@ -1,0 +1,108 @@
+# Azure Functions deployment ignore file
+# Files and directories that should NOT be deployed
+
+# Git and version control
+.git/
+.gitignore
+.gitmodules
+
+# Python virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build and distribution
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing
+.tests/
+tests/
+unit/
+integration/
+pytest/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Documentation
+docs/
+*.md
+*.rst
+*.txt
+
+# Logs
+logs/
+*.log
+.log/
+
+# Local development
+local.settings.json
+local.settings.json.bak
+
+# Deployment artifacts
+deploy/
+deployment/
+.pipelines/
+
+# Configuration files that shouldn't be deployed
+*.yml
+*.yaml
+docker-compose.*
+Dockerfile*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Azure specific
+.arc/
+.azure/
+
+# MCP Framework specific - keep these out of deployment
+platform/
+examples/
+template/
+metadata/
+
+# Root level files that are not needed in deployment
+main.py
+requirements.txt
+README.md
+
+# Only deploy from src/azure directory
+!src/azure/
+!src/azure/**/*
+
+# Ensure host.json and function.json are deployed
+!src/azure/host.json
+!src/azure/function.json
+!src/azure/requirements.txt
