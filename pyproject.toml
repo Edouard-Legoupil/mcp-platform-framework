@@ -1,0 +1,161 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcp-framework"
+version = "1.0.0"
+description = "MCP Framework - Model Context Protocol Server for Azure Functions"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+authors = [
+    {name = "MCP Framework Team", email = "mcp-framework@example.com"}
+]
+keywords = ["mcp", "model-context-protocol", "azure-functions", "copilot", "copilot-studio"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: Azure Functions",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    # Azure Functions Core (REQUIRED)
+    "azure-functions>=1.21.0",
+    
+    # Azure SDK dependencies
+    "azure-identity>=1.10.0",
+    "azure-keyvault-secrets>=4.5.0",
+    "azure-monitor-opentelemetry>=1.0.0",
+    "azure-storage-blob>=12.15.0",
+    
+    # OpenTelemetry for Azure Functions
+    "opentelemetry-api>=1.17.0",
+    "opentelemetry-sdk>=1.17.0",
+    "opentelemetry-exporter-azuremonitor>=1.0.0",
+    "opentelemetry-instrumentation-azure-functions>=1.0.0",
+    
+    # Core framework dependencies
+    "pydantic>=2.0.0",
+    "python-jose[cryptography]>=3.3.0,<42.0.0",
+    "passlib[bcrypt]>=1.7.4",
+    "PyJWT>=2.8.0",
+    
+    # Configuration
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0.0",
+    
+    # HTTP utilities
+    "python-multipart>=0.0.6",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=24.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+    "types-PyYAML>=6.0.0",
+    "types-python-jose>=3.3.0",
+    "types-passlib>=1.7.4",
+]
+test = [
+    "pytest>=7.0.0",
+    "pytest-azurepipelines>=0.12.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/example/mcp-framework"
+Documentation = "https://github.com/example/mcp-framework#readme"
+Repository = "https://github.com/example/mcp-framework"
+Issues = "https://github.com/example/mcp-framework/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "tools*", "platform*", "deployment*"]
+
+[tool.black]
+line-length = 120
+target-version = ["py311", "py312"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+    | \.venv
+    | venv
+    | build
+    | dist
+    | __pycache__
+    | \.python_packages
+)/
+'''
+
+[tool.flake8]
+max-line-length = 120
+extend-exclude = [
+    ".git",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+    "__pycache__",
+    ".python_packages",
+]
+ignore = [
+    "E203",  # Whitespace before ':' (conflicts with Black)
+    "W503",  # Line break before binary operator (conflicts with Black)
+]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = ["azure.*", "opentelemetry.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+testpaths = ["tests"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks integration tests",
+    "unit: marks unit tests",
+]
+
+[tool.coverage.run]
+source = ["."]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+]
+ignore_errors = true
+
+[tool.coverage.html]
+directory = "htmlcov"
