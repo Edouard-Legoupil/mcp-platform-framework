@@ -10,7 +10,7 @@ This repository serves as a **template for creating MCP (Model Context Protocol)
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/mcp-framework.git your-mcp-server
+git clone https://github.com/Edouard-Legoupil/mcp-platform-framework.git your-mcp-server
 cd your-mcp-server
 
 # Remove git history to start fresh
