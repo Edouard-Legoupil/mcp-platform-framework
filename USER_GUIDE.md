@@ -839,11 +839,23 @@ func azure functionapp function list --name $AZURE_FUNCTION_APP_NAME --resource-
 
 ## 📚 Additional Resources
 
+### MCP Server Development
 - [Framework Documentation (FRAMEWORK_DOCUMENTATION.md)](FRAMEWORK_DOCUMENTATION.md) - **For Framework Contributors**
 - [Template Guide (TEMPLATE_GUIDE.md)](TEMPLATE_GUIDE.md) - **Quick Start Examples**
 - [Main README (README.md)](README.md) - **Project Overview**
+
+### Data Source Integration
+- **[Fabric Integration Guide (FABRIC_INTEGRATION_GUIDE.md)](FABRIC_INTEGRATION_GUIDE.md)** - **🎯 Connect to Microsoft Fabric Semantic Models**
+  - Step-by-step Fabric connection setup
+  - Semantic model tool creation
+  - Resource exposure for Fabric data
+  - Complete end-to-end examples
+  - Troubleshooting guide
+
+### External Documentation
 - [Azure Functions Documentation](https://learn.microsoft.com/en-us/azure/azure-functions/) - **Azure Functions Official Docs**
 - [MCP Protocol Specification](https://github.com/modelcontextprotocol/specification) - **MCP Official Spec**
+- [Microsoft Fabric Documentation](https://learn.microsoft.com/en-us/fabric/) - **Fabric Official Docs**
 
 ---
 

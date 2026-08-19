@@ -319,6 +319,7 @@ mcp-framework/
 ### For MCP Server Developers
 - 📖 [USER_GUIDE.md](USER_GUIDE.md) - Complete user guide
 - 📖 [TEMPLATE_GUIDE.md](TEMPLATE_GUIDE.md) - Quick start template
+- 📖 **[FABRIC_INTEGRATION_GUIDE.md](FABRIC_INTEGRATION_GUIDE.md)** - **Connect to Fabric Semantic Models**
 - 💬 Open an issue with your question
 
 ### For Framework Contributors
