@@ -63,19 +63,25 @@ Your MCP server can:
 Gather this information before starting:
 
 ```bash
+# Azure AD Tenant (Same for Azure and Fabric)
+AZURE_TENANT_ID="your-tenant-id"            # Your Azure AD tenant ID
+# NOTE: FABRIC_TENANT_ID is optional - if not set, falls back to AZURE_TENANT_ID
+
 # Fabric Workspace
-FABRIC_TENANT_ID="your-tenant-id"           # Azure AD tenant ID
 FABRIC_WORKSPACE_ID="your-workspace-id"     # Fabric workspace ID (GUID)
 
 # Semantic Model
-SEMANTIC_MODEL_ID="your-model-id"           # Semantic model ID (GUID)
-SEMANTIC_MODEL_NAME="YourModel"            # Semantic model name
+FABRIC_SEMANTIC_MODEL_ID="your-model-id"   # Semantic model ID (GUID)
+FABRIC_SEMANTIC_MODEL_NAME="YourModel"      # Semantic model name
 
-# Authentication
-AZURE_TENANT_ID="your-tenant-id"            # Same as FABRIC_TENANT_ID
+# Azure AD App Registration (for authentication)
 AZURE_CLIENT_ID="your-client-id"           # Azure AD app registration client ID
 AZURE_CLIENT_SECRET="your-client-secret"   # Azure AD app registration secret
 ```
+
+**💡 Important Note:** `FABRIC_TENANT_ID` and `AZURE_TENANT_ID` are **typically the same**. 
+Fabric uses Azure Active Directory for authentication, so both services use the same tenant.
+The framework automatically falls back to `AZURE_TENANT_ID` if `FABRIC_TENANT_ID` is not set.
 
 ### 3. Fabric Permissions
 
@@ -116,6 +122,10 @@ Create a Fabric configuration file:
 # my_domain/config/fabric_config.py
 """
 Fabric Configuration for MCP Server
+
+Note: FABRIC_TENANT_ID and AZURE_TENANT_ID are typically the SAME.
+Fabric uses Azure Active Directory, so both use the same tenant.
+The framework falls back to AZURE_TENANT_ID if FABRIC_TENANT_ID is not set.
 """
 import os
 from dataclasses import dataclass
@@ -145,23 +155,30 @@ class FabricConfig:
     
     @classmethod
     def from_environment(cls) -> "FabricConfig":
-        """Load configuration from environment variables"""
+        """
+        Load configuration from environment variables
+        
+        Note: tenant_id uses FABRIC_TENANT_ID if set, otherwise falls back to AZURE_TENANT_ID
+        """
         semantic_models = []
         
         # You can define multiple semantic models
         # For now, we'll use the one from environment
         if os.getenv('FABRIC_SEMANTIC_MODEL_ID') and os.getenv('FABRIC_SEMANTIC_MODEL_NAME'):
+            # Use AZURE_TENANT_ID as fallback for tenant_id
+            tenant_id = os.getenv('FABRIC_TENANT_ID', os.getenv('AZURE_TENANT_ID'))
             semantic_models.append(
                 FabricSemanticModel(
                     name=os.getenv('FABRIC_SEMANTIC_MODEL_NAME'),
                     model_id=os.getenv('FABRIC_SEMANTIC_MODEL_ID'),
                     workspace_id=os.getenv('FABRIC_WORKSPACE_ID'),
-                    tenant_id=os.getenv('FABRIC_TENANT_ID'),
+                    tenant_id=tenant_id,
                     description=f"Semantic model: {os.getenv('FABRIC_SEMANTIC_MODEL_NAME')}"
                 )
             )
         
         return cls(
+            # Use FABRIC_TENANT_ID if set, otherwise fall back to AZURE_TENANT_ID
             tenant_id=os.getenv('FABRIC_TENANT_ID', os.getenv('AZURE_TENANT_ID')),
             workspace_id=os.getenv('FABRIC_WORKSPACE_ID'),
             client_id=os.getenv('AZURE_CLIENT_ID'),
@@ -1313,6 +1330,114 @@ Now that you've connected your MCP server to your Fabric semantic models:
 - **[USER_GUIDE.md](USER_GUIDE.md)** - Complete user guide
 - **[FRAMEWORK_DOCUMENTATION.md](FRAMEWORK_DOCUMENTATION.md)** - Framework internals
 - **[TEMPLATE_GUIDE.md](TEMPLATE_GUIDE.md)** - Quick start template
+
+---
+
+## ❓ **Frequently Asked Questions**
+
+### Q: Is FABRIC_TENANT_ID different from AZURE_TENANT_ID?
+
+**A: No, they are typically the SAME.**
+
+Fabric uses **Azure Active Directory** for authentication, so both Azure services and Fabric use the same tenant ID. The framework is designed with a fallback mechanism:
+
+```python
+# In fabric_config.py
+tenant_id = os.getenv('FABRIC_TENANT_ID', os.getenv('AZURE_TENANT_ID'))
+```
+
+**Best Practice:**
+- Set `AZURE_TENANT_ID` (required for other Azure services anyway)
+- Optionally set `FABRIC_TENANT_ID` if you want to be explicit
+- If both are set, `FABRIC_TENANT_ID` takes precedence
+
+### Q: Can I use the same service principal for multiple semantic models?
+
+**A: Yes!**
+
+A single service principal can access multiple semantic models, as long as it has the appropriate permissions on each workspace. You can define multiple semantic models in your configuration:
+
+```python
+# In fabric_config.py
+semantic_models = [
+    FabricSemanticModel(
+        name="SalesModel",
+        model_id="sales-model-id",
+        workspace_id="sales-workspace-id",
+        tenant_id=tenant_id
+    ),
+    FabricSemanticModel(
+        name="HRModel",
+        model_id="hr-model-id", 
+        workspace_id="hr-workspace-id",
+        tenant_id=tenant_id
+    )
+]
+```
+
+### Q: What permissions does my service principal need?
+
+**A: Minimum required permissions:**
+
+| Resource | Required Role |
+|----------|---------------|
+| Fabric Workspace | Workspace Contributor or Admin |
+| Semantic Model | Reader |
+| Underlying Data | Data Reader |
+
+**Recommended:** Start with **Workspace Admin** role during development, then refine to least-privilege for production.
+
+### Q: Can I use Managed Identity instead of service principal?
+
+**A: Yes, and it's recommended for production!**
+
+The framework supports both. For Managed Identity:
+
+```python
+# In fabric_config.py
+@dataclass
+class FabricConfig:
+    tenant_id: str
+    workspace_id: str
+    # For Managed Identity, omit client_id and client_secret
+    use_managed_identity: bool = False
+    client_id: Optional[str] = None
+    client_secret: Optional[str] = None
+```
+
+Then use `DefaultAzureCredential()` which automatically tries Managed Identity first.
+
+### Q: How do I find my Fabric workspace ID and semantic model ID?
+
+**A: Use the Fabric REST API or Power BI:**
+
+**Via Fabric REST API:**
+```bash
+# List workspaces
+curl -X GET "https://api.fabric.microsoft.com/v1/workspaces" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+
+# Get semantic models in a workspace
+curl -X GET "https://api.fabric.microsoft.com/v1/workspaces/{workspace-id}/semanticModels" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+**Via Power BI Service:**
+1. Go to Power BI Service (app.powerbi.com)
+2. Navigate to your workspace
+3. Click on the semantic model
+4. The URL will contain the workspace ID and model ID
+
+### Q: Can I connect to semantic models in different tenants?
+
+**A: Technically possible, but not recommended.**
+
+Cross-tenant access requires:
+1. Azure AD B2B collaboration setup
+2. Explicit permissions granted in the target tenant
+3. Complex authentication configuration
+
+**Recommendation:** Keep everything in the same tenant for simplicity.
 
 ---
 
