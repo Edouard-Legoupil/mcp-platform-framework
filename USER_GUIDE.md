@@ -121,27 +121,28 @@ The MCP Framework handles all the **infrastructure concerns** so you can focus o
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    YOUR MCP SERVER                              │
+│                    YOUR MCP SERVER                          │
 ├─────────────────────────────────────────────────────────────┤
-│                                                                  │
+│                                                             │
 │  ┌─────────────────────────────────────────────────────────┐│
-│  │                    FRAMEWORK LAYER                        ││
-│  │  ✅ Authentication, Authorization, Telemetry, Errors     ││
-│  │  ✅ Configuration, Connectivity, Audit, Classification    ││
+│  │                    FRAMEWORK LAYER                      ││
+│  │  ✅ Authentication, Authorization, Telemetry, Errors    ││
+│  │  ✅ Configuration, Connectivity, Audit, Classification  ││
 │  └─────────────────────────────────────────────────────────┘│
-│                                                                  │
+│                                                             │
 │  ┌─────────────────────────────────────────────────────────┐│
-│  │                    YOUR DOMAIN LAYER                       ││
+│  │                    YOUR DOMAIN LAYER                    ││
 │  │  🎯 Tools, Resources, Prompts, Ontologies               ││
-│  │  🎯 Business Logic, Domain Models                        ││
+│  │  🎯 Business Logic, Domain Models                       ││
 │  └─────────────────────────────────────────────────────────┘│
-│                                                                  │
+│                                                             │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                 AZURE FUNCTIONS v4                             │
-│  ✅ HTTP Triggers, Function App, Storage, Application Insights  │
+│                 AZURE FUNCTIONS v4                          │
+│  ✅ HTTP Triggers, Function App, Storage,                   │
+│         Application Insights                                │
 └─────────────────────────────────────────────────────────────┘
 ```
 

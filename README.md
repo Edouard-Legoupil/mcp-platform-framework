@@ -82,51 +82,51 @@ This repository serves **two distinct audiences**. Please select your path:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                         YOUR MCP SERVER ON AZURE                              │
+│                         YOUR MCP SERVER ON AZURE                        │
 ├─────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
+│                                                                         │
 │  ┌─────────────────────────────────────────────────────────────────────┐│
-│  │                         AZURE FUNCTIONS v4                              ││
-│  │  ✅ HTTP Triggers, Function App, Storage, Application Insights         ││
+│  │                         AZURE FUNCTIONS v4                          ││
+│  │  ✅ HTTP Triggers, Function App, Storage, Application Insights      ││
 │  └─────────────────────────────────────────────────────────────────────┘│
-│                                                                              │
+│                                                                         │
 │  ┌─────────────────────────────────────────────────────────────────────┐│
-│  │                      MCP FRAMEWORK LAYER                               ││
-│  │  🏗️ Framework Contributors work here                                   ││
-│  │                                                                       ││
+│  │                      MCP FRAMEWORK LAYER                            ││
+│  │  🏗️ Framework Contributors work here                                ││
+│  │                                                                     ││
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐               ││
-│  │  │ Authentication│  │ Authorization│  │  Telemetry   │               ││
+│  │  │ Authentication│  │ Authorization│  │  Telemetry   │              ││
 │  │  │  (Entra ID,  │  │   (RBAC,     │  │ (Auto-collect│               ││
 │  │  │   JWT, etc.) │  │  Policies)   │  │  tool calls) │               ││
 │  │  └──────────────┘  └──────────────┘  └──────────────┘               ││
-│  │                                                                       ││
+│  │                                                                     ││
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐               ││
 │  │  │   Audit      │  │   Error      │  │Classification│               ││
 │  │  │  (Immutable  │  │  Handling    │  │ (Data        │               ││
 │  │  │   logs)      │  │ (Standardized│  │  controls)   │               ││
 │  │  └──────────────┘  └──────────────┘  └──────────────┘               ││
-│  │                                                                       ││
+│  │                                                                     ││
 │  │  ┌─────────────────────────────────────────────────────────────────┐││
-│  │  │                    CONNECTIVITY LAYER                              │││
-│  │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐            │││
-│  │  │  │ Semantic     │  │  Warehouse   │  │  Lakehouse   │            │││
-│  │  │  │  Models      │  │  (SQL)       │  │  (Delta)     │            │││
-│  │  │  └──────────────┘  └──────────────┘  └──────────────┘            │││
+│  │  │                    CONNECTIVITY LAYER                           │││
+│  │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐           │││
+│  │  │  │ Semantic     │  │  Warehouse   │  │  Lakehouse   │           │││
+│  │  │  │  Models      │  │  (SQL)       │  │  (Delta)     │           │││
+│  │  │  └──────────────┘  └──────────────┘  └──────────────┘           │││
 │  │  └─────────────────────────────────────────────────────────────────┘││
 │  └─────────────────────────────────────────────────────────────────────┘│
-│                                                                              │
+│                                                                         │
 │  ┌─────────────────────────────────────────────────────────────────────┐│
-│  │                      YOUR DOMAIN LAYER                                  ││
-│  │  🎯 MCP Server Developers work here                                    ││
-│  │                                                                       ││
+│  │                      YOUR DOMAIN LAYER                              ││
+│  │  🎯 MCP Server Developers work here                                 ││
+│  │                                                                     ││
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐               ││
-│  │  │    Tools     │  │  Resources    │  │   Prompts    │               ││
-│  │  │ (Functions)  │  │ (Data Sources)│  │ (Templates)  │               ││
+│  │  │    Tools     │  │  Resources    │  │   Prompts    │              ││
+│  │  │ (Functions)  │  │ (Data Sources)│  │ (Templates)  │              ││
 │  │  └──────────────┘  └──────────────┘  └──────────────┘               ││
-│  │                                                                       ││
-│  │  🎯 Your Business Logic, Domain Models, Ontologies                   ││
+│  │                                                                     ││
+│  │  🎯 Your Business Logic, Domain Models, Ontologies                  ││
 │  └─────────────────────────────────────────────────────────────────────┘│
-│                                                                              │
+│                                                                         │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
