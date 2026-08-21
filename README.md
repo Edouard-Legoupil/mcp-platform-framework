@@ -7,6 +7,8 @@
 
 **A production-ready template for deploying MCP (Model Context Protocol) servers on Azure Functions, fully compatible with Microsoft Copilot and Copilot Studio.**
 
+![overview](https://raw.githubusercontent.com/Edouard-Legoupil/mcp-platform-framework/refs/heads/master/docs/illus.png) 
+[intro post](https://www.linkedin.com/posts/edouardlegoupil_ai-mcp-datagovernance-share-7493234887450218496-t5tD/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAADY0hQBILmJl4WgHMLMVzwTHQ_hG6RACWE)
 ---
 
 ## 🎯 **Choose Your Path**
